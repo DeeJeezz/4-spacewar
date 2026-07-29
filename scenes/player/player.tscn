@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dgn2txqvk7ovf"]
+
+[ext_resource type="Script" uid="uid://c8bgv7gjg7dw5" path="res://scenes/player/player.gd" id="1_8afob"]
+[ext_resource type="Script" uid="uid://cnd3pw8nx0lis" path="res://scripts/components/wrapped.gd" id="2_dovo2"]
+[ext_resource type="PackedScene" uid="uid://botfsjp43mr3b" path="res://scenes/bullet/bullet.tscn" id="2_gmlin"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e0byr"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_e0byr"]
+size = Vector2(16, 16)
+
+[node name="Player" type="CharacterBody2D" unique_id=121888796]
+slide_on_ceiling = false
+platform_floor_layers = 4294901760
+script = ExtResource("1_8afob")
+player_index = &"1"
+bullet_scene = ExtResource("2_gmlin")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=701925383]
+shape = SubResource("RectangleShape2D_e0byr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=857314326]
+texture = SubResource("PlaceholderTexture2D_e0byr")
+
+[node name="Wrapped" type="Node" parent="." unique_id=162760190]
+script = ExtResource("2_dovo2")
+metadata/_custom_type_script = "uid://cnd3pw8nx0lis"

@@ -30,6 +30,8 @@ gravity_point_center = Vector2(0, 0)
 gravity_direction = Vector2(0, 0)
 gravity = 100.0
 script = ExtResource("2_7h61r")
+gravity_strength = 400000.0
+minimum_gravity_distance = 10.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Star" unique_id=1252287292]
 shape = SubResource("RectangleShape2D_e0byr")

@@ -1,5 +1,5 @@
-extends CharacterBody2D
 class_name Player
+extends CharacterBody2D
 
 @export var player_index: StringName
 @export var thrust_strength: float = 50.0
@@ -11,16 +11,17 @@ var _thrust_direction: Vector2 = Vector2.ZERO
 var _can_shoot: bool = true
 
 
+func _process(delta: float) -> void:
+	handle_input(delta)
+
+
 func _physics_process(delta: float) -> void:
 	velocity += get_gravity() * delta
 	velocity += _thrust_direction * thrust_strength * delta
+	velocity *= 0.99
 	velocity = velocity.limit_length(50)
 
 	move_and_slide()
-
-
-func _process(delta: float) -> void:
-	handle_input(delta)
 
 
 func handle_input(delta: float) -> void:

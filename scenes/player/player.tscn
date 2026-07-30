@@ -3,10 +3,15 @@
 [ext_resource type="Script" uid="uid://c8bgv7gjg7dw5" path="res://scenes/player/player.gd" id="1_8afob"]
 [ext_resource type="Script" uid="uid://cnd3pw8nx0lis" path="res://scripts/components/wrapped.gd" id="2_dovo2"]
 [ext_resource type="PackedScene" uid="uid://botfsjp43mr3b" path="res://scenes/bullet/bullet.tscn" id="2_gmlin"]
+[ext_resource type="Script" uid="uid://cqn1juna4qp53" path="res://scenes/player/hurtbox.gd" id="4_lvxji"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0byr"]
+size = Vector2(6, 6)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_e0byr"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uing5"]
 size = Vector2(16, 16)
 
 [node name="Player" type="CharacterBody2D" unique_id=121888796]
@@ -25,3 +30,11 @@ texture = SubResource("PlaceholderTexture2D_e0byr")
 [node name="Wrapped" type="Node" parent="." unique_id=162760190]
 script = ExtResource("2_dovo2")
 metadata/_custom_type_script = "uid://cnd3pw8nx0lis"
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=244309688]
+monitorable = false
+script = ExtResource("4_lvxji")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=155398652]
+shape = SubResource("RectangleShape2D_uing5")
+debug_color = Color(0.9552042, 1.0588765e-06, 0.54697853, 0.41960785)

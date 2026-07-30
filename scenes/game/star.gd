@@ -3,7 +3,7 @@ extends Area2D
 
 @export_group("Gravity")
 @export var gravity_strength: float = 500_000.0
-@export var minimum_gravity_distance: float = 25.0
+@export var minimum_gravity_distance: float = 100.0
 
 var _targets: Array[Player]
 
@@ -20,7 +20,6 @@ func _physics_process(delta: float) -> void:
 		var offset: Vector2 = get_wrapped_offset(target.global_position, global_position)
 		var distance_squared: float = offset.length_squared()
 
-		# Защита от деления на ноль и чрезмерного ускорения.
 		var minimum_squared: float = minimum_gravity_distance * minimum_gravity_distance
 		distance_squared = maxf(distance_squared, minimum_squared)
 

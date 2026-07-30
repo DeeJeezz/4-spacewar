@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://botfsjp43mr3b"]
 
 [ext_resource type="Script" uid="uid://ctmht7rskeh0o" path="res://scenes/bullet/bullet.gd" id="1_7c8un"]
+[ext_resource type="Texture2D" uid="uid://cdthk1nd7ng7l" path="res://assets/img/bullets/plasma_1.png" id="2_83itf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0byr"]
-size = Vector2(4, 8)
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_e0byr"]
 size = Vector2(4, 8)
 
 [node name="Bullet" type="Area2D" unique_id=820324522]
@@ -15,4 +13,4 @@ script = ExtResource("1_7c8un")
 shape = SubResource("RectangleShape2D_e0byr")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2139612579]
-texture = SubResource("PlaceholderTexture2D_e0byr")
+texture = ExtResource("2_83itf")

@@ -13,11 +13,17 @@ extends CharacterBody2D
 @export var bullet_scene: PackedScene
 @export var shoot_cooldown: float = 0.5
 
-@export_enum("1", "2") var player_index: String
+@export var bullet_spawn_point: Marker2D
+
+@export_enum("LEFT:1", "RIGHT:2") var player_index: int
 
 var _thrust_direction: Vector2 = Vector2.ZERO
 
 var _can_shoot: bool = true
+
+var _exhaust_tween: Tween
+
+@onready var _exhaust: AnimatedSprite2D = $Exhaust
 
 
 func _process(delta: float) -> void:
@@ -25,9 +31,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	velocity += get_gravity() * delta
 	velocity += _thrust_direction * thrust_strength * delta
-	velocity *= 0.99
 	velocity = velocity.limit_length(50)
 
 	move_and_slide()
@@ -35,17 +39,21 @@ func _physics_process(delta: float) -> void:
 
 func handle_input(delta: float) -> void:
 	var rotation_direction: float = Input.get_axis(
-		&"p%s_rotate_left" % player_index,
-		&"p%s_rotate_right" % player_index,
+		&"p%d_rotate_left" % player_index,
+		&"p%d_rotate_right" % player_index,
 	)
 	rotate(rotation_direction * delta)
 
-	if Input.is_action_pressed(&"p%s_thrust" % player_index):
+	if Input.is_action_pressed(&"p%d_thrust" % player_index):
 		_thrust_direction = Vector2.UP.rotated(rotation)
+		if not _exhaust.is_playing():
+			_exhaust.play(&"idle")
+		_fade_exhaust(1.0)
 	else:
 		_thrust_direction = Vector2.ZERO
+		_fade_exhaust(0.0)
 
-	if Input.is_action_pressed(&"p%s_shoot" % player_index) and _can_shoot:
+	if Input.is_action_pressed(&"p%d_shoot" % player_index) and _can_shoot:
 		fire_bullet()
 		_can_shoot = false
 		get_tree().create_timer(shoot_cooldown).timeout.connect(
@@ -57,5 +65,18 @@ func handle_input(delta: float) -> void:
 func fire_bullet() -> void:
 	var bullet: Bullet = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(bullet)
-	bullet.global_position = global_position
+	bullet.global_position = bullet_spawn_point.global_position
 	bullet.rotation = rotation
+
+
+func _fade_exhaust(target_alpha: float) -> void:
+	if _exhaust_tween and _exhaust_tween.is_valid():
+		_exhaust_tween.kill()
+	_exhaust_tween = create_tween()
+	_exhaust_tween.tween_property(_exhaust, "modulate:a", target_alpha, 0.3)
+	if is_zero_approx(target_alpha):
+		_exhaust_tween.finished.connect(
+			func():
+				_exhaust.stop()
+				_exhaust.modulate.a = 0.0,
+		)

@@ -1,10 +1,19 @@
 class_name Player
 extends CharacterBody2D
+## Base player class
+##
+## Usage: [br]
+## * Set [param player_index] to "1" or "2" to specify the player's index. Player 1 is the left player,
+## Player 2 is the right player. [br]
+## * Set [param thrust_strength] to adjust the player's thrust strength. [br]
+## * Set [param bullet_scene] to the player's bullet scene. [br]
+## * Set [param shoot_cooldown] to adjust the player's shoot cooldown.
 
-@export var player_index: StringName
 @export var thrust_strength: float = 50.0
 @export var bullet_scene: PackedScene
 @export var shoot_cooldown: float = 0.5
+
+@export_enum("1", "2") var player_index: String
 
 var _thrust_direction: Vector2 = Vector2.ZERO
 
@@ -31,12 +40,12 @@ func handle_input(delta: float) -> void:
 	)
 	rotate(rotation_direction * delta)
 
-	if Input.is_action_pressed("p%s_thrust" % player_index):
+	if Input.is_action_pressed(&"p%s_thrust" % player_index):
 		_thrust_direction = Vector2.UP.rotated(rotation)
 	else:
 		_thrust_direction = Vector2.ZERO
 
-	if Input.is_action_pressed("p%s_shoot" % player_index) and _can_shoot:
+	if Input.is_action_pressed(&"p%s_shoot" % player_index) and _can_shoot:
 		fire_bullet()
 		_can_shoot = false
 		get_tree().create_timer(shoot_cooldown).timeout.connect(

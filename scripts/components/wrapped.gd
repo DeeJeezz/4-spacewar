@@ -1,5 +1,10 @@
 class_name Wrapped
 extends Node
+## Component for screen wrapping.
+##
+## Usage:
+## * Add as a child of the node to be wrapped.
+## * Set [param wrap_margin] to control the margin from the screen edges.
 
 @export var wrap_margin: float = 16.0
 

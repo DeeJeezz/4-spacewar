@@ -1,5 +1,6 @@
 class_name Hurtbox
 extends Area2D
+## Hurtbox for the player.
 
 
 func _ready() -> void:

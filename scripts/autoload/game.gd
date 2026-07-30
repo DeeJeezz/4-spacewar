@@ -1,4 +1,5 @@
 extends Node
+## Main game state.
 
 var SCREEN_SIZE: Vector2
 

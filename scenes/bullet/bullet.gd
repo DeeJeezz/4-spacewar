@@ -1,5 +1,5 @@
-extends Area2D
 class_name Bullet
+extends Area2D
 
 @export var speed: float = 100.0
 @export var ttl: float = 3.0

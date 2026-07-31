@@ -20,6 +20,8 @@ Godot editor binary: `/Applications/Godot.app/Contents/MacOS/Godot` — run a sc
 
 After any change to a scene (`.tscn`) or its scripts, launch that scene in the Godot editor and verify it runs without errors.
 
+Keep this file in sync with the project — whenever the architecture changes (new/renamed scenes, scripts, autoloads, or signals), update `AGENTS.md` as part of the same change.
+
 ## Architecture
 
 `run/main_scene` is `scenes/main/main.tscn` — the persistent root.
@@ -31,10 +33,12 @@ After any change to a scene (`.tscn`) or its scripts, launch that scene in the G
 | `scripts/autoload/game.gd` | Autoload singleton providing `Game.SCREEN_SIZE` |
 | `scripts/components/wrapped.gd` | `Wrapped` component — screen-wrap child for any Node2D |
 | `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire |
-| `scenes/player/hurtbox.gd` | `Hurtbox` — emits `damage_received` on bullet hit, `ship_collided` on ship collision |
-| `scenes/player/health.gd` | `Health` component — HP, listens to `Hurtbox` signals, emits `died` when killed |
-| `scenes/bullet/bullet.gd` | `Bullet` with speed and TTL |
+| `scenes/player/hurtbox.gd` | `Hurtbox` — emits `damage_received(amount, attacker_player_index)` on bullet hit, `ship_collided` on ship collision |
+| `scenes/player/health.gd` | `Health` component — HP, listens to `Hurtbox` signals, emits `died(attacker_player_index)` when killed; `kill()` emits index `0` (collision scores nobody) |
+| `scenes/bullet/bullet.gd` | `Bullet` with speed and TTL; carries `owner_player_index` of the shooter |
 | `scenes/game/star.gd` | `Star` — orbital gravity (wrap-aware offset) |
+| `scenes/game/score_manager.gd` | `ScoreManager` — child of the `Game` root; listens to both players' `Hurtbox`/`Health`, +50 per hit (`HIT_POINTS`), +150 per kill (`KILL_POINTS`); emits `score_changed(player_index, score)` |
+| `scenes/game/ui_manager.gd` | `UIManager` (CanvasLayer) — child of the `Game` root; renders scores into `%P1ScoreLabel` (top-left) / `%P2ScoreLabel` (top-right) |
 
 `menu.tscn` / `game.tscn` are children of `Main` that get swapped — never instantiated as the main scene.
 

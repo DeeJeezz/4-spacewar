@@ -8,7 +8,7 @@ extends Node
 ## collisions kill instantly.
 
 signal health_changed(current: int, max_health: int)
-signal died
+signal died(attacker_player_index: int)
 
 @export var max_health: int = 3
 
@@ -23,14 +23,14 @@ func _ready() -> void:
 	hurtbox.ship_collided.connect(kill)
 
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, attacker_player_index: int) -> void:
 	if is_dead or amount <= 0:
 		return
 	current_health = maxi(current_health - amount, 0)
 	health_changed.emit(current_health, max_health)
 	if current_health == 0:
 		is_dead = true
-		died.emit()
+		died.emit(attacker_player_index)
 
 
 func kill() -> void:
@@ -39,4 +39,4 @@ func kill() -> void:
 	current_health = 0
 	is_dead = true
 	health_changed.emit(current_health, max_health)
-	died.emit()
+	died.emit(0)

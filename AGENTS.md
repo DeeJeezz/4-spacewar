@@ -16,6 +16,8 @@ pre-commit run gdlint         # lint only
 
 No test, build, or dev-server commands. Open the project in Godot editor to run.
 
+Godot editor binary: `/Applications/Godot.app/Contents/MacOS/Godot` — run a scene with `--path .` from the project root.
+
 After any change to a scene (`.tscn`) or its scripts, launch that scene in the Godot editor and verify it runs without errors.
 
 ## Architecture

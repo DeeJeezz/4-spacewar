@@ -92,7 +92,7 @@ func _fade_exhaust(target_alpha: float) -> void:
 		)
 
 
-func _on_died() -> void:
+func _on_died(_attacker_player_index: int) -> void:
 	set_process(false)
 	set_physics_process(false)
 	set_deferred(&"collision_layer", 0)

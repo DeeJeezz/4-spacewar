@@ -7,10 +7,14 @@ extends CharacterBody2D
 ## Player 1 is the left player, Player 2 is the right player. [br]
 ## * Set [param thrust_strength] to adjust the player's thrust strength. [br]
 ## * Set [param bullet_scene] to the player's bullet scene. [br]
-## * Set [param shoot_cooldown] to adjust the player's shoot cooldown.
+## * Set [param shoot_cooldown] to adjust the player's shoot cooldown. [br]
+## * Set [param is_ai] to drive this player with an [EnemyAI] component instead of
+## the keyboard.
 
 const HEALTH_BAR_OFFSET: float = 26.0
 const HEALTH_BAR_HALF_WIDTH: float = 20.0
+
+const ENEMY_AI_SCRIPT: GDScript = preload("res://scenes/player/enemy_ai.gd")
 
 @export var thrust_strength: float = 50.0
 @export var rotation_speed: float = 2.0
@@ -18,6 +22,7 @@ const HEALTH_BAR_HALF_WIDTH: float = 20.0
 @export var shoot_cooldown: float = 0.5
 
 @export var bullet_spawn_point: Marker2D
+@export var is_ai: bool = false
 
 @export_enum("LEFT:1", "RIGHT:2") var player_index: int
 
@@ -52,10 +57,15 @@ func _ready() -> void:
 	_health.health_changed.connect(_on_health_changed)
 	EventBus.ship_damage_received.connect(_on_ship_damage_received)
 	_on_health_changed(_health.current_health, _health.max_health)
+	if is_ai:
+		var ai: EnemyAI = ENEMY_AI_SCRIPT.new()
+		ai.name = "EnemyAI"
+		add_child(ai)
 
 
 func _process(delta: float) -> void:
-	handle_input(delta)
+	if not is_ai:
+		handle_input(delta)
 	_health_bar.position = Vector2(-HEALTH_BAR_HALF_WIDTH, -HEALTH_BAR_OFFSET).rotated(-rotation)
 	_health_bar.rotation = -rotation
 
@@ -68,13 +78,22 @@ func _physics_process(delta: float) -> void:
 
 
 func handle_input(delta: float) -> void:
-	var rotation_direction: float = Input.get_axis(
-		&"p%d_rotate_left" % player_index,
-		&"p%d_rotate_right" % player_index,
+	rotate_ship(
+		Input.get_axis(&"p%d_rotate_left" % player_index, &"p%d_rotate_right" % player_index),
+		delta,
 	)
+	set_thrusting(Input.is_action_pressed(&"p%d_thrust" % player_index))
+
+	if Input.is_action_pressed(&"p%d_shoot" % player_index):
+		try_fire()
+
+
+func rotate_ship(rotation_direction: float, delta: float) -> void:
 	rotation += rotation_direction * delta * rotation_speed
 
-	if Input.is_action_pressed(&"p%d_thrust" % player_index):
+
+func set_thrusting(thrusting: bool) -> void:
+	if thrusting:
 		_thrust_direction = Vector2.UP.rotated(rotation)
 		if not _exhaust.is_playing():
 			_exhaust.play(&"idle")
@@ -86,13 +105,16 @@ func handle_input(delta: float) -> void:
 		_fade_exhaust(0.0)
 		_engine_sfx.stop()
 
-	if Input.is_action_pressed(&"p%d_shoot" % player_index) and _can_shoot:
-		fire_bullet()
-		_can_shoot = false
-		get_tree().create_timer(shoot_cooldown).timeout.connect(
-			func() -> void:
-				_can_shoot = true,
-		)
+
+func try_fire() -> void:
+	if not _can_shoot:
+		return
+	fire_bullet()
+	_can_shoot = false
+	get_tree().create_timer(shoot_cooldown).timeout.connect(
+		func() -> void:
+			_can_shoot = true,
+	)
 
 
 func set_ship_texture(texture: Texture2D) -> void:
@@ -155,6 +177,10 @@ func _on_died(_attacker_player_index: int) -> void:
 	_explosion.play(str(player_index))
 	_explosion_sfx.play()
 	_engine_sfx.stop()
+	if _exhaust_tween and _exhaust_tween.is_valid():
+		_exhaust_tween.kill()
+	_exhaust.stop()
+	_exhaust.modulate.a = 0.0
 	_explosion.animation_finished.connect(_on_explosion_finished)
 	_stop_damage_flash()
 

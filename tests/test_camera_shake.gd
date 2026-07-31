@@ -6,7 +6,7 @@ const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
 
 func test_camera_centers_on_screen(framework: RefCounted) -> void:
 	var game: GameScene = await _make_game()
-	var camera: ShakingCamera = game.get_node("Camera")
+	var camera: ShakingCamera = game.get_node("ShakingCamera")
 	framework.check_equal(
 		camera.global_position,
 		Game.SCREEN_SIZE / 2.0,
@@ -16,7 +16,7 @@ func test_camera_centers_on_screen(framework: RefCounted) -> void:
 
 func test_damage_starts_shake(framework: RefCounted) -> void:
 	var game: GameScene = await _make_game()
-	var camera: ShakingCamera = game.get_node("Camera")
+	var camera: ShakingCamera = game.get_node("ShakingCamera")
 
 	EventBus.ship_damage_received.emit(1, 1, 2)
 
@@ -28,7 +28,7 @@ func test_damage_starts_shake(framework: RefCounted) -> void:
 
 func test_intensity_capped_at_shake_intensity(framework: RefCounted) -> void:
 	var game: GameScene = await _make_game()
-	var camera: ShakingCamera = game.get_node("Camera")
+	var camera: ShakingCamera = game.get_node("ShakingCamera")
 
 	EventBus.ship_damage_received.emit(10, 1, 2)
 
@@ -42,7 +42,7 @@ func test_intensity_capped_at_shake_intensity(framework: RefCounted) -> void:
 
 func test_shake_decays_and_resets(framework: RefCounted) -> void:
 	var game: GameScene = await _make_game()
-	var camera: ShakingCamera = game.get_node("Camera")
+	var camera: ShakingCamera = game.get_node("ShakingCamera")
 
 	EventBus.ship_damage_received.emit(1, 1, 2)
 	camera._process(1.0 / camera.shake_frequency)

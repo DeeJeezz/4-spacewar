@@ -18,6 +18,7 @@ run/main_scene="res://scenes/main/main.tscn"
 [autoload]
 
 Game="*uid://bkpgxw7srpp3a"
+Settings="*res://scripts/autoload/settings.gd"
 
 [display]
 

@@ -3,6 +3,7 @@ extends Node
 
 const MENU_SCENE: PackedScene = preload("res://scenes/menu/menu.tscn")
 const GAME_SCENE: PackedScene = preload("res://scenes/game/game.tscn")
+const SETTINGS_SCENE: PackedScene = preload("res://scenes/settings/settings.tscn")
 const VICTORY_SCENE: PackedScene = preload("res://scenes/victory/victory.tscn")
 
 var _current_scene: Node
@@ -15,6 +16,7 @@ func _ready() -> void:
 func show_menu() -> void:
 	var menu: MainMenu = MENU_SCENE.instantiate()
 	menu.play_pressed.connect(_on_play_pressed)
+	menu.settings_pressed.connect(_on_settings_pressed)
 	menu.quit_pressed.connect(_on_quit_pressed)
 	_set_scene(menu)
 
@@ -23,6 +25,12 @@ func _on_play_pressed() -> void:
 	var game: GameScene = GAME_SCENE.instantiate()
 	game.game_over.connect(_on_game_over)
 	_set_scene(game)
+
+
+func _on_settings_pressed() -> void:
+	var settings: SettingsScreen = SETTINGS_SCENE.instantiate()
+	settings.back_pressed.connect(show_menu)
+	_set_scene(settings)
 
 
 func _on_game_over(winner_index: int, score: int) -> void:

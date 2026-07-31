@@ -12,13 +12,14 @@ Godot 4.8 / GL Compatibility — 2D two-player spacewar game.
 ```bash
 pre-commit run --all-files   # format + lint all GDScript
 pre-commit run gdlint         # lint only
+./run_tests.sh                # headless test suite
 ```
 
-No test, build, or dev-server commands. Open the project in Godot editor to run.
+Run `./run_tests.sh` after every change to a script (`.gd`), scene (`.tscn`), `project.godot`, or `AGENTS.md` — the suite covers components, managers, settings persistence, and the screen-swap flow. The script imports resources headless first, so a fresh `class_name` or scene never blocks the runner.
 
 Godot editor binary: `/Applications/Godot.app/Contents/MacOS/Godot` — run a scene with `--path .` from the project root.
 
-After any change to a scene (`.tscn`) or its scripts, launch that scene in the Godot editor and verify it runs without errors.
+After any change to a scene (`.tscn`) or its scripts, launch that scene in the Godot editor and verify it runs without errors (and run `./run_tests.sh`).
 
 Keep this file in sync with the project — whenever the architecture changes (new/renamed scenes, scripts, autoloads, or signals), update `AGENTS.md` as part of the same change.
 
@@ -28,10 +29,11 @@ Keep this file in sync with the project — whenever the architecture changes (n
 
 | Path | Role |
 |---|---|
-| `scenes/main/main.gd` | Root scene manager — swaps the current screen (`_set_scene()`); preloads `menu.tscn`, `game.tscn`, and `victory.tscn`; connects the game's `game_over` to the victory screen |
-| `scenes/menu/menu.gd` | `MainMenu` (Control) — emits `play_pressed` / `quit_pressed`; buttons `%PlayButton`, `%QuitButton` |
+| `scenes/main/main.gd` | Root scene manager — swaps the current screen (`_set_scene()`); preloads `menu.tscn`, `game.tscn`, `settings.tscn`, and `victory.tscn`; connects the game's `game_over` to the victory screen and the menu's `settings_pressed` to the settings screen |
+| `scenes/menu/menu.gd` | `MainMenu` (Control) — emits `play_pressed` / `settings_pressed` / `quit_pressed`; buttons `%PlayButton`, `%SettingsButton`, `%QuitButton` |
 | `scenes/game/game.gd` | `GameScene` — root script of `game.tscn`; forwards `game_over(winner_player_index, winner_score)` from `RespawnManager` to `Main` |
 | `scripts/autoload/game.gd` | Autoload singleton providing `Game.SCREEN_SIZE` — the content-space size (`get_visible_rect().size`), set once in `_ready` |
+| `scripts/autoload/settings.gd` | Autoload singleton `Settings` — persists audio volumes (linear 0..1) to `user://user_data.ini` (section `[audio]`, keys `master`/`music`/`effects`); loads on startup and applies them to the `Master`/`Music`/`SFX` audio buses; setter methods `set_master_volume` / `set_music_volume` / `set_effects_volume` each apply and save; creates missing buses as a fallback |
 | `scripts/components/wrapped.gd` | `Wrapped` component — screen-wrap child for any Node2D |
 | `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire; hides on death and `respawn(spawn_position)` restores it |
 | `scenes/player/hurtbox.gd` | `Hurtbox` — emits `damage_received(amount, attacker_player_index)` on bullet hit, `ship_collided` on ship collision |
@@ -41,9 +43,24 @@ Keep this file in sync with the project — whenever the architecture changes (n
 | `scenes/game/score_manager.gd` | `ScoreManager` — child of the `Game` root; listens to both players' `Hurtbox`/`Health`, +50 per hit (`HIT_POINTS`), +150 per kill (`KILL_POINTS`); emits `score_changed(player_index, score)` |
 | `scenes/game/respawn_manager.gd` | `RespawnManager` — child of the `Game` root; gives each player `INITIAL_RESPAWNS` (3); respawns a player at the screen periphery after `RESPAWN_DELAY` (3 s) and re-applies the star's initial radial velocity; emits `respawns_changed(player_index, respawns_left)` on each count change and `game_over(winner_player_index, winner_score)` when a player runs out of respawns |
 | `scenes/game/ui_manager.gd` | `UIManager` (CanvasLayer) — child of the `Game` root; renders scores into `%P1ScoreLabel` (top-left) / `%P2ScoreLabel` (top-right) and remaining respawns into `%P1RespawnsLabel` / `%P2RespawnsLabel` (each with an icon `TextureRect` placeholder) |
+| `scenes/settings/settings.gd` | `SettingsScreen` (Control) — three `HSlider`s for master/music/effects volume; writes each change to the `Settings` autoload; button `%BackButton` emits `back_pressed` |
 | `scenes/victory/victory.gd` | `VictoryScreen` (Control) — `setup(winner_index, score)` fills labels; buttons `%RestartButton` / `%MenuButton` emit `restart_pressed` / `menu_pressed` |
 
-`menu.tscn` / `game.tscn` / `victory.tscn` are children of `Main` that get swapped — never instantiated as the main scene.
+`menu.tscn` / `game.tscn` / `settings.tscn` / `victory.tscn` are children of `Main` that get swapped — never instantiated as the main scene.
+
+Audio buses are defined in `default_bus_layout.tres` (`Master`, `Music`, `SFX`); audio volumes are applied via `AudioServer`.
+
+## Testing
+
+Tests live in `tests/` and run headless via `./run_tests.sh`.
+
+| Path | Role |
+|---|---|
+| `tests/run_tests.tscn` + `run_tests.gd` | Runner — discovers every `tests/test_*.gd` file, runs each `test_*(framework)` method, prints a summary, and exits non-zero on failure; sets `Game.SCREEN_SIZE` to (640, 360) and deletes `user://user_data.ini` when done |
+| `tests/test_framework.gd` | Assertion framework — a test method receives a `framework` argument with `check_true` / `check_false` / `check_equal` / `check_almost_equal` / `check_null` / `check_not_null` |
+| `tests/fixtures.gd` | Static fixture builders — `make_player(index)`, `make_bullet(owner)`, `make_player_with_health()`, `make_game_root()` (players + star + managers wired like `game.tscn`) |
+
+Test files must not declare a `class_name` (the runner loads them by path); methods are discovered by the `test_` prefix with exactly one argument.
 
 ## Input (no Input Map — actions defined in `project.godot`)
 

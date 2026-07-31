@@ -3,8 +3,8 @@ extends CharacterBody2D
 ## Base player class
 ##
 ## Usage: [br]
-## * Set [param player_index] to "1" or "2" to specify the player's index. Player 1 is the left player,
-## Player 2 is the right player. [br]
+## * Set [param player_index] to "1" or "2" to specify the player's index.
+## Player 1 is the left player, Player 2 is the right player. [br]
 ## * Set [param thrust_strength] to adjust the player's thrust strength. [br]
 ## * Set [param bullet_scene] to the player's bullet scene. [br]
 ## * Set [param shoot_cooldown] to adjust the player's shoot cooldown.

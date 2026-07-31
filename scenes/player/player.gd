@@ -24,6 +24,10 @@ var _can_shoot: bool = true
 
 var _exhaust_tween: Tween
 
+var _initial_collision_layer: int
+
+var _initial_collision_mask: int
+
 @onready var _exhaust: AnimatedSprite2D = $Exhaust
 @onready var _health: Health = $Health
 @onready var _hurtbox: Hurtbox = $Hurtbox
@@ -32,6 +36,8 @@ var _exhaust_tween: Tween
 
 
 func _ready() -> void:
+	_initial_collision_layer = collision_layer
+	_initial_collision_mask = collision_mask
 	_health.died.connect(_on_died)
 
 
@@ -79,6 +85,25 @@ func fire_bullet() -> void:
 	bullet.owner_player_index = player_index
 
 
+func respawn(spawn_position: Vector2) -> void:
+	global_position = spawn_position
+	rotation = 0.0
+	velocity = Vector2.ZERO
+	_thrust_direction = Vector2.ZERO
+	_can_shoot = true
+	collision_layer = _initial_collision_layer
+	collision_mask = _initial_collision_mask
+	_hurtbox.monitoring = true
+	_ship_sprite.visible = true
+	_explosion.hide()
+	_exhaust.stop()
+	_exhaust.modulate.a = 0.0
+	_health.reset()
+	show()
+	set_process(true)
+	set_physics_process(true)
+
+
 func _fade_exhaust(target_alpha: float) -> void:
 	if _exhaust_tween and _exhaust_tween.is_valid():
 		_exhaust_tween.kill()
@@ -101,4 +126,9 @@ func _on_died(_attacker_player_index: int) -> void:
 	_ship_sprite.visible = false
 	_explosion.show()
 	_explosion.play(str(player_index))
-	_explosion.animation_finished.connect(queue_free)
+	_explosion.animation_finished.connect(_on_explosion_finished)
+
+
+func _on_explosion_finished() -> void:
+	_explosion.animation_finished.disconnect(_on_explosion_finished)
+	hide()

@@ -40,3 +40,9 @@ func kill() -> void:
 	is_dead = true
 	health_changed.emit(current_health, max_health)
 	died.emit(0)
+
+
+func reset() -> void:
+	current_health = max_health
+	is_dead = false
+	health_changed.emit(current_health, max_health)

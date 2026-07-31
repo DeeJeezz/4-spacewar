@@ -44,13 +44,7 @@ func get_wrapped_offset(from: Vector2, to: Vector2) -> Vector2:
 	return offset
 
 
-func _on_body_entered(body: Node2D) -> void:
-	if body is Player:
-		_targets.append(body)
-		_apply_initial_radial_velocity(body)
-
-
-func _apply_initial_radial_velocity(body: Player) -> void:
+func apply_initial_radial_velocity(body: Player) -> void:
 	var radial: Vector2 = body.global_position - global_position
 	var radius: float = radial.length()
 
@@ -58,3 +52,9 @@ func _apply_initial_radial_velocity(body: Player) -> void:
 		var tangent: Vector2 = radial.normalized().rotated(PI / 2.0)
 		var orbital_speed: float = sqrt(gravity_strength / radius)
 		body.velocity = tangent * orbital_speed
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if body is Player and body not in _targets:
+		_targets.append(body)
+		apply_initial_radial_velocity(body)

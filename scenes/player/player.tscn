@@ -206,16 +206,20 @@ frame_progress = 0.6929318
 
 [node name="ShootSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000001]
 stream = ExtResource("33_5mf0n")
+volume_db = -9.0
 bus = &"SFX"
 
 [node name="DamageSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000002]
 stream = ExtResource("34_bbmj2")
+volume_db = -5.0
 bus = &"SFX"
 
 [node name="ExplosionSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000003]
 stream = ExtResource("34_4hvnv")
+volume_db = -3.0
 bus = &"SFX"
 
 [node name="EngineSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000004]
 stream = ExtResource("36_kxw46")
+volume_db = -5.0
 bus = &"SFX"

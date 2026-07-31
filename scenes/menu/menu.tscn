@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://l7m9junlhvan5"]
+[gd_scene format=3 uid="uid://mfnrovtsaneu"]
 
-[ext_resource type="Script" uid="uid://780tg2sb4vdl3" path="res://scenes/menu/menu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://ccquqmgbmadjy" path="res://scenes/menu/menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://cmkv2khfif7sl" path="res://assets/img/background/Purple_Nebula_04-512x512.png" id="2_bg"]
+[ext_resource type="AudioStream" uid="uid://ky8uhh50x34i" path="res://assets/audio/music/NoGravity.mp3" id="3_e0arn"]
 
-[node name="Menu" type="Control"]
+[node name="Menu" type="Control" unique_id=1663113651]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=468245119]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +24,7 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=528042583]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,34 +32,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1437188254]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1710982186]
 layout_mode = 2
 theme_override_font_sizes/font_size = 36
 text = "SPACEWAR"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=970270815]
 unique_name_in_owner = true
-layout_mode = 2
 custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
 text = "Играть"
 
-[node name="SettingsButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=848887021]
 unique_name_in_owner = true
-layout_mode = 2
 custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
 text = "Настройки"
 
-[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=912457147]
 unique_name_in_owner = true
-layout_mode = 2
 custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
 text = "Выход"
 
-[node name="Music" type="AudioStreamPlayer" parent="."]
-bus = &"Music"
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=158650178]
+stream = ExtResource("3_e0arn")
 autoplay = true
+bus = &"Music"

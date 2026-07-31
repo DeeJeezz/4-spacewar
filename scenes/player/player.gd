@@ -38,6 +38,7 @@ var _initial_collision_mask: int
 @onready var _shoot_sfx: AudioStreamPlayer2D = $ShootSFX
 @onready var _damage_sfx: AudioStreamPlayer2D = $DamageSFX
 @onready var _explosion_sfx: AudioStreamPlayer2D = $ExplosionSFX
+@onready var _engine_sfx: AudioStreamPlayer2D = $EngineSFX
 
 
 func _ready() -> void:
@@ -70,9 +71,12 @@ func handle_input(delta: float) -> void:
 		if not _exhaust.is_playing():
 			_exhaust.play(&"idle")
 		_fade_exhaust(1.0)
+		if not _engine_sfx.is_playing():
+			_engine_sfx.play()
 	else:
 		_thrust_direction = Vector2.ZERO
 		_fade_exhaust(0.0)
+		_engine_sfx.stop()
 
 	if Input.is_action_pressed(&"p%d_shoot" % player_index) and _can_shoot:
 		fire_bullet()
@@ -109,6 +113,7 @@ func respawn(spawn_position: Vector2) -> void:
 	_explosion.hide()
 	_exhaust.stop()
 	_exhaust.modulate.a = 0.0
+	_engine_sfx.stop()
 	_health.reset()
 	_stop_damage_flash()
 	show()
@@ -139,6 +144,7 @@ func _on_died(_attacker_player_index: int) -> void:
 	_explosion.show()
 	_explosion.play(str(player_index))
 	_explosion_sfx.play()
+	_engine_sfx.stop()
 	_explosion.animation_finished.connect(_on_explosion_finished)
 	_stop_damage_flash()
 

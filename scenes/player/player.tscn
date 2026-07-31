@@ -5,8 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://botfsjp43mr3b" path="res://scenes/bullet/bullet.tscn" id="2_gmlin"]
 [ext_resource type="Texture2D" uid="uid://p1412wg4ptn7" path="res://assets/img/ships/player_b_m.png" id="3_p47bc"]
 [ext_resource type="Script" uid="uid://cqn1juna4qp53" path="res://scenes/player/hurtbox.gd" id="4_lvxji"]
-[ext_resource type="Script" path="res://scenes/player/health.gd" id="31_health"]
-[ext_resource type="Shader" path="res://scenes/player/damage_flash.gdshader" id="32_damage_flash"]
 [ext_resource type="Texture2D" uid="uid://cklq1sjd74yg7" path="res://assets/img/fx/explosions/explosion_1_01.png" id="6_007i1"]
 [ext_resource type="Texture2D" uid="uid://gtuy4ddj0t74" path="res://assets/img/fx/explosions/explosion_1_02.png" id="7_6cv16"]
 [ext_resource type="Texture2D" uid="uid://u1uq0u257g6m" path="res://assets/img/fx/explosions/explosion_1_03.png" id="8_j4nxn"]
@@ -32,9 +30,24 @@
 [ext_resource type="Texture2D" uid="uid://cqp6fmskxtjit" path="res://assets/img/fx/exhaust/exhaust_03.png" id="28_pk8ii"]
 [ext_resource type="Texture2D" uid="uid://rj42o5gy8otr" path="res://assets/img/fx/exhaust/exhaust_04.png" id="29_5mf0n"]
 [ext_resource type="Texture2D" uid="uid://cybcn6gvps66h" path="res://assets/img/fx/exhaust/exhaust_05.png" id="30_4hvnv"]
+[ext_resource type="Script" uid="uid://ove08m4eyuij" path="res://scenes/player/health.gd" id="31_health"]
+[ext_resource type="Shader" uid="uid://coj6rp75j7efw" path="res://scenes/player/damage_flash.gdshader" id="32_damage_flash"]
+[ext_resource type="AudioStream" uid="uid://cekik12lobeie" path="res://assets/audio/sfx/shoot.wav" id="33_5mf0n"]
+[ext_resource type="AudioStream" uid="uid://bvgbwfatnjcew" path="res://assets/audio/sfx/explosion.wav" id="34_4hvnv"]
+[ext_resource type="AudioStream" uid="uid://cg0s76pvh12rd" path="res://assets/audio/sfx/hit.wav" id="34_bbmj2"]
+[ext_resource type="AudioStream" uid="uid://ypa2d3c8h2j8" path="res://assets/audio/sfx/engine.ogg" id="36_kxw46"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0byr"]
 size = Vector2(6, 6)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_damage_flash"]
+resource_local_to_scene = true
+shader = ExtResource("32_damage_flash")
+shader_parameter/flash_color = Color(1, 0.2, 0.2, 1)
+shader_parameter/flash_strength = 1.0
+shader_parameter/blink_count = 3
+shader_parameter/blink_duration = 0.5
+shader_parameter/flash_amount = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uing5"]
 size = Vector2(16, 16)
@@ -141,15 +154,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_damage_flash"]
-resource_local_to_scene = true
-shader = ExtResource("32_damage_flash")
-shader_parameter/blink_count = 3
-shader_parameter/blink_duration = 0.5
-shader_parameter/flash_amount = 0.0
-shader_parameter/flash_color = Color(1, 0.2, 0.2, 1)
-shader_parameter/flash_strength = 1.0
-
 [node name="Player" type="CharacterBody2D" unique_id=121888796 node_paths=PackedStringArray("bullet_spawn_point")]
 slide_on_ceiling = false
 platform_floor_layers = 4294901760
@@ -163,10 +167,10 @@ player_index = 1
 shape = SubResource("RectangleShape2D_e0byr")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=857314326]
+material = SubResource("ShaderMaterial_damage_flash")
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("3_p47bc")
 offset = Vector2(1, 0)
-material = SubResource("ShaderMaterial_damage_flash")
 
 [node name="Wrapped" type="Node" parent="." unique_id=162760190]
 script = ExtResource("2_dovo2")
@@ -201,10 +205,17 @@ animation = &"idle"
 frame_progress = 0.6929318
 
 [node name="ShootSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000001]
+stream = ExtResource("33_5mf0n")
 bus = &"SFX"
 
 [node name="DamageSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000002]
+stream = ExtResource("34_bbmj2")
 bus = &"SFX"
 
 [node name="ExplosionSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000003]
+stream = ExtResource("34_4hvnv")
+bus = &"SFX"
+
+[node name="EngineSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000004]
+stream = ExtResource("36_kxw46")
 bus = &"SFX"

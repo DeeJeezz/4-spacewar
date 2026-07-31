@@ -11,9 +11,16 @@
 [ext_resource type="Script" uid="uid://br8ff0salyllp" path="res://scenes/game/respawn_manager.gd" id="6_respawn_mgr"]
 [ext_resource type="Script" uid="uid://b3tdftvcxpxfd" path="res://scenes/game/camera_shake.gd" id="7_camera"]
 [ext_resource type="PackedScene" path="res://scenes/game/pause_menu.tscn" id="8_pause_menu"]
+[ext_resource type="AudioStream" uid="uid://dqlxlwjs3jujn" path="res://assets/audio/music/Stars.mp3" id="11_vaxfo"]
+[ext_resource type="AudioStream" uid="uid://cxiyctvk37vri" path="res://assets/audio/music/FarBeyond.mp3" id="12_ftsea"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0byr"]
 size = Vector2(680, 400)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_kp23o"]
+streams_count = 2
+stream_0/stream = ExtResource("11_vaxfo")
+stream_1/stream = ExtResource("12_ftsea")
 
 [node name="Game" type="Node2D" unique_id=310058948]
 script = ExtResource("5_game")
@@ -156,6 +163,7 @@ text = "3"
 horizontal_alignment = 2
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1800000001]
+stream = SubResource("AudioStreamRandomizer_kp23o")
 autoplay = true
 bus = &"Music"
 

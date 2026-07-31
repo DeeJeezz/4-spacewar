@@ -37,3 +37,17 @@ The game was initially controlled via switches on the computer, but a student at
 
 - https://screamingbrainstudios.itch.io/seamless-space-backgrounds
 - https://ravenmore.itch.io/space-shooter-assets-space-rage
+
+### UI
+
+- https://catterpxl.itch.io/sci-fi-buttons
+
+### Music
+
+- https://newc-42.itch.io/spacewave
+
+### SFX
+
+- https://dabolka.itch.io/sfx-pack
+- https://dabolka.itch.io/sfx-pack-2-free
+- https://nancygold.itch.io/sfxpack

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://lppsiv12srshb"]
+
+[ext_resource type="Script" uid="uid://8i4nii9s6p9rp" path="res://scenes/main/main.gd" id="1_main"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_main")

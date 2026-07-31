@@ -16,6 +16,8 @@ pre-commit run gdlint         # lint only
 
 No test, build, or dev-server commands. Open the project in Godot editor to run.
 
+After any change to a scene (`.tscn`) or its scripts, launch that scene in the Godot editor and verify it runs without errors.
+
 ## Architecture
 
 | Path | Role |
@@ -23,7 +25,8 @@ No test, build, or dev-server commands. Open the project in Godot editor to run.
 | `scripts/autoload/game.gd` | Autoload singleton providing `Game.SCREEN_SIZE` |
 | `scripts/components/wrapped.gd` | `Wrapped` component — screen-wrap child for any Node2D |
 | `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire |
-| `scenes/player/hurtbox.gd` | `Hurtbox` — collision kill on bullet/player contact |
+| `scenes/player/hurtbox.gd` | `Hurtbox` — emits `damage_received` on bullet hit, `ship_collided` on ship collision |
+| `scenes/player/health.gd` | `Health` component — HP, listens to `Hurtbox` signals, emits `died` when killed |
 | `scenes/bullet/bullet.gd` | `Bullet` with speed and TTL |
 | `scenes/game/star.gd` | `Star` — orbital gravity (wrap-aware offset) |
 
@@ -44,6 +47,7 @@ Player index is `@export_enum("LEFT:1", "RIGHT:2")` — set to 1 or 2 in the sce
 - Max line length 120
 - Naming patterns in `gdlintrc` — snake_case for functions/vars, PascalCase for classes/enums, UPPER_CASE for constants
 - Class member order defined in `gdlintrc` (tools → classnames → extends → docstrings → signals → enums → consts → staticvars → exports → pubvars → prvvars → onreadypubvars → onreadyprvvars → others)
+- Don't use `StringName` where the documentation doesn't require it. Use the `StringName` type only for Input action names and animation names.
 
 ## Gotchas
 

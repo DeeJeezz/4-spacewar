@@ -10,6 +10,7 @@ extends CharacterBody2D
 ## * Set [param shoot_cooldown] to adjust the player's shoot cooldown.
 
 @export var thrust_strength: float = 50.0
+@export var rotation_speed: float = 2.0
 @export var bullet_scene: PackedScene
 @export var shoot_cooldown: float = 0.5
 
@@ -24,6 +25,14 @@ var _can_shoot: bool = true
 var _exhaust_tween: Tween
 
 @onready var _exhaust: AnimatedSprite2D = $Exhaust
+@onready var _health: Health = $Health
+@onready var _hurtbox: Hurtbox = $Hurtbox
+@onready var _ship_sprite: Sprite2D = $Sprite2D
+@onready var _explosion: AnimatedSprite2D = $Explosion
+
+
+func _ready() -> void:
+	_health.died.connect(_on_died)
 
 
 func _process(delta: float) -> void:
@@ -42,7 +51,7 @@ func handle_input(delta: float) -> void:
 		&"p%d_rotate_left" % player_index,
 		&"p%d_rotate_right" % player_index,
 	)
-	rotate(rotation_direction * delta)
+	rotation += rotation_direction * delta * rotation_speed
 
 	if Input.is_action_pressed(&"p%d_thrust" % player_index):
 		_thrust_direction = Vector2.UP.rotated(rotation)
@@ -64,9 +73,10 @@ func handle_input(delta: float) -> void:
 
 func fire_bullet() -> void:
 	var bullet: Bullet = bullet_scene.instantiate()
-	get_tree().current_scene.add_child(bullet)
+	get_parent().add_child(bullet)
 	bullet.global_position = bullet_spawn_point.global_position
 	bullet.rotation = rotation
+	bullet.owner_player_index = player_index
 
 
 func _fade_exhaust(target_alpha: float) -> void:
@@ -80,3 +90,15 @@ func _fade_exhaust(target_alpha: float) -> void:
 				_exhaust.stop()
 				_exhaust.modulate.a = 0.0,
 		)
+
+
+func _on_died() -> void:
+	set_process(false)
+	set_physics_process(false)
+	set_deferred(&"collision_layer", 0)
+	set_deferred(&"collision_mask", 0)
+	_hurtbox.set_deferred(&"monitoring", false)
+	_ship_sprite.visible = false
+	_explosion.show()
+	_explosion.play(str(player_index))
+	_explosion.animation_finished.connect(queue_free)

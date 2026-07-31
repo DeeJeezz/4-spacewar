@@ -8,6 +8,9 @@ extends Area2D
 
 @export var speed: float = 100.0
 @export var ttl: float = 3.0
+@export var damage: int = 1
+
+var owner_player_index: int = 0
 
 
 func _physics_process(delta: float) -> void:

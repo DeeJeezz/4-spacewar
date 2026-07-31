@@ -30,3 +30,10 @@ The game was initially controlled via switches on the computer, but a student at
 
 - The original Spacewar! was multiplayer only, but feel free to add an AI opponent to face off against!
 - Alternatively, this might be a good time to try to make an online multiplayer game. (if that's a skill that you intend to learn)
+
+## Credits
+
+### Sprites
+
+- https://screamingbrainstudios.itch.io/seamless-space-backgrounds
+- https://ravenmore.itch.io/space-shooter-assets-space-rage

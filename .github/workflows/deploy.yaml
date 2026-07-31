@@ -1,0 +1,89 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: 4.8
+  ITCH_GAME: ${{ vars.ITCH_USER_NAME }}/${{ vars.ITCH_GAME_NAME }}
+  BUILD_DIR: builds/web
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Create build directory
+        run: mkdir -p ${BUILD_DIR}
+
+      - name: Download Godot
+        run: |
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
+          chmod +x Godot_v${GODOT_VERSION}-stable_linux.x86_64
+
+      - name: Download export templates
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          wget https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          unzip Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+
+      - name: Export Web Build
+        run: |
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless --export-release "Web" ${BUILD_DIR}/index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          name: "build"
+          path: "builds/web"
+
+  deploy-itch:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip -d butler-bin
+          chmod +x butler-bin/butler
+
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: "build"
+
+      - name: Push to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.ITCH_API_KEY }}
+        run: |
+          mkdir unpacked/ && mv artifact.tar unpacked/ && cd unpacked/
+          tar -xvf artifact.tar
+          ../butler-bin/butler push . ${ITCH_GAME}:html5 --userversion ${GITHUB_REF_NAME}
+
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: ${{ vars.ITCH_GAME_NAME }}
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: "build"

@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  GODOT_VERSION: 4.8
+  GODOT_VERSION: 4.7
   ITCH_GAME: ${{ vars.ITCH_USER_NAME }}/${{ vars.ITCH_GAME_NAME }}
   BUILD_DIR: builds/web
 

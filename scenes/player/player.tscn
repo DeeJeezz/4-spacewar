@@ -31,7 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://rj42o5gy8otr" path="res://assets/img/fx/exhaust/exhaust_04.png" id="29_5mf0n"]
 [ext_resource type="Texture2D" uid="uid://cybcn6gvps66h" path="res://assets/img/fx/exhaust/exhaust_05.png" id="30_4hvnv"]
 [ext_resource type="Script" uid="uid://ove08m4eyuij" path="res://scenes/player/health.gd" id="31_health"]
-[ext_resource type="Shader" uid="uid://coj6rp75j7efw" path="res://scenes/player/damage_flash.gdshader" id="32_damage_flash"]
+[ext_resource type="Shader" uid="uid://coj6rp75j7efw" path="res://assets/shaders/damage_flash.gdshader" id="32_damage_flash"]
 [ext_resource type="AudioStream" uid="uid://cekik12lobeie" path="res://assets/audio/sfx/shoot.wav" id="33_5mf0n"]
 [ext_resource type="AudioStream" uid="uid://bvgbwfatnjcew" path="res://assets/audio/sfx/explosion.wav" id="34_4hvnv"]
 [ext_resource type="AudioStream" uid="uid://cg0s76pvh12rd" path="res://assets/audio/sfx/hit.wav" id="34_bbmj2"]

@@ -2,7 +2,68 @@
 
 [ext_resource type="Script" uid="uid://ccquqmgbmadjy" path="res://scenes/menu/menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://cmkv2khfif7sl" path="res://assets/img/background/Purple_Nebula_04-512x512.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://n86yk6byy36a" path="res://assets/img/ui/sci_fi_buttons_dark.png" id="3_037ec"]
 [ext_resource type="AudioStream" uid="uid://ky8uhh50x34i" path="res://assets/audio/music/NoGravity.mp3" id="3_e0arn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0byr"]
+atlas = ExtResource("3_037ec")
+region = Rect2(3, 79, 70, 30)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_y1o0p"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8yej"]
+atlas = SubResource("CompressedTexture2D_y1o0p")
+region = Rect2(149, 83, 70, 26)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3y2rt"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0a87"]
+atlas = SubResource("CompressedTexture2D_3y2rt")
+region = Rect2(76, 81, 70, 28)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_037ec"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y1o0p"]
+atlas = SubResource("CompressedTexture2D_037ec")
+region = Rect2(3, 113, 103, 30)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_r8yej"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3y2rt"]
+atlas = SubResource("CompressedTexture2D_r8yej")
+region = Rect2(215, 117, 103, 26)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_t0a87"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qo0fc"]
+atlas = SubResource("CompressedTexture2D_t0a87")
+region = Rect2(109, 115, 103, 28)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_k48pe"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2fum"]
+atlas = SubResource("CompressedTexture2D_k48pe")
+region = Rect2(4, 215, 55, 30)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kaijy"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y4i35"]
+atlas = SubResource("CompressedTexture2D_kaijy")
+region = Rect2(120, 219, 55, 26)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_rcuxh"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_64m6r"]
+atlas = SubResource("CompressedTexture2D_rcuxh")
+region = Rect2(62, 217, 55, 28)
 
 [node name="Menu" type="Control" unique_id=1663113651]
 layout_mode = 3
@@ -33,6 +94,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1437188254]
+custom_maximum_size = Vector2(100, -1)
 layout_mode = 2
 theme_override_constants/separation = 16
 
@@ -42,23 +104,29 @@ theme_override_font_sizes/font_size = 36
 text = "SPACEWAR"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=970270815]
+[node name="PlayButton" type="TextureButton" parent="CenterContainer/VBoxContainer" unique_id=1218894502]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
-text = "Играть"
+texture_normal = SubResource("AtlasTexture_e0byr")
+texture_pressed = SubResource("AtlasTexture_r8yej")
+texture_hover = SubResource("AtlasTexture_t0a87")
+stretch_mode = 5
 
-[node name="SettingsButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=848887021]
+[node name="SettingsButton" type="TextureButton" parent="CenterContainer/VBoxContainer" unique_id=1630156821]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
-text = "Настройки"
+texture_normal = SubResource("AtlasTexture_y1o0p")
+texture_pressed = SubResource("AtlasTexture_3y2rt")
+texture_hover = SubResource("AtlasTexture_qo0fc")
+stretch_mode = 5
 
-[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=912457147]
+[node name="QuitButton" type="TextureButton" parent="CenterContainer/VBoxContainer" unique_id=1668493833]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
-text = "Выход"
+texture_normal = SubResource("AtlasTexture_f2fum")
+texture_pressed = SubResource("AtlasTexture_y4i35")
+texture_hover = SubResource("AtlasTexture_64m6r")
+stretch_mode = 5
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=158650178]
 stream = ExtResource("3_e0arn")

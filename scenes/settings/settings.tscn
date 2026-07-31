@@ -4,6 +4,27 @@
 [ext_resource type="Texture2D" uid="uid://cmkv2khfif7sl" path="res://assets/img/background/Purple_Nebula_04-512x512.png" id="2_bg"]
 [ext_resource type="AudioStream" uid="uid://dyp0g5awp17ks" path="res://assets/audio/music/OutOfTheOrbit.mp3" id="3_tt6xx"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tt6xx"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1slea"]
+atlas = SubResource("CompressedTexture2D_tt6xx")
+region = Rect2(4, 181, 68, 30)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_v1hle"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vghtj"]
+atlas = SubResource("CompressedTexture2D_v1hle")
+region = Rect2(146, 185, 68, 26)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h6son"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vimye"]
+atlas = SubResource("CompressedTexture2D_h6son")
+region = Rect2(75, 183, 68, 28)
+
 [node name="Settings" type="Control" unique_id=1194669686]
 layout_mode = 3
 anchors_preset = 15
@@ -39,7 +60,7 @@ theme_override_constants/separation = 16
 [node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=155661729]
 layout_mode = 2
 theme_override_font_sizes/font_size = 36
-text = "Настройки"
+text = "Settings"
 horizontal_alignment = 1
 
 [node name="MasterRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=902913879]
@@ -47,9 +68,10 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="MasterLabel" type="Label" parent="CenterContainer/VBoxContainer/MasterRow" unique_id=816885683]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-text = "Общая громкость"
+text = "Master"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MasterSlider" type="HSlider" parent="CenterContainer/VBoxContainer/MasterRow" unique_id=713061343]
@@ -74,9 +96,10 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="MusicLabel" type="Label" parent="CenterContainer/VBoxContainer/MusicRow" unique_id=948298844]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-text = "Музыка"
+text = "Music"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MusicSlider" type="HSlider" parent="CenterContainer/VBoxContainer/MusicRow" unique_id=475191061]
@@ -101,9 +124,10 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="EffectsLabel" type="Label" parent="CenterContainer/VBoxContainer/EffectsRow" unique_id=1668301619]
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-text = "Эффекты"
+text = "SFX"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="EffectsSlider" type="HSlider" parent="CenterContainer/VBoxContainer/EffectsRow" unique_id=312651922]
@@ -123,12 +147,14 @@ text = "100%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1794944978]
+[node name="BackButton" type="TextureButton" parent="CenterContainer/VBoxContainer" unique_id=388122915]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Назад"
+texture_normal = SubResource("AtlasTexture_1slea")
+texture_pressed = SubResource("AtlasTexture_vghtj")
+texture_hover = SubResource("AtlasTexture_vimye")
+stretch_mode = 5
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1797418309]
 stream = ExtResource("3_tt6xx")

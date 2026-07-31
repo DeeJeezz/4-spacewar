@@ -51,3 +51,7 @@ The game was initially controlled via switches on the computer, but a student at
 - https://dabolka.itch.io/sfx-pack
 - https://dabolka.itch.io/sfx-pack-2-free
 - https://nancygold.itch.io/sfxpack
+
+### Fonts
+
+- https://v3x3d.itch.io/

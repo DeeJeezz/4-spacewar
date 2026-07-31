@@ -14,7 +14,7 @@ signal back_pressed
 @onready var _master_value_label: Label = %MasterValueLabel
 @onready var _music_value_label: Label = %MusicValueLabel
 @onready var _effects_value_label: Label = %EffectsValueLabel
-@onready var _back_button: Button = %BackButton
+@onready var _back_button: BaseButton = %BackButton
 
 
 func _ready() -> void:

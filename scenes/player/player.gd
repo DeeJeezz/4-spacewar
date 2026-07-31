@@ -165,23 +165,26 @@ func _on_ship_damage_received(
 
 
 func _play_damage_flash() -> void:
-	var material: ShaderMaterial = _ship_sprite.material as ShaderMaterial
-	if material == null:
+	var ship_material: ShaderMaterial = _ship_sprite.material as ShaderMaterial
+	if ship_material == null:
 		return
 	_stop_damage_flash()
-	var blink_count: int = maxi(int(material.get_shader_parameter("blink_count")), 1)
-	var blink_duration: float = maxf(float(material.get_shader_parameter("blink_duration")), 0.1)
+	var blink_count: int = maxi(int(ship_material.get_shader_parameter("blink_count")), 1)
+	var blink_duration: float = maxf(
+		float(ship_material.get_shader_parameter("blink_duration")),
+		0.1,
+	)
 	var half_blink: float = blink_duration / (2.0 * blink_count)
 	_flash_tween = create_tween()
 	for _i in blink_count:
-		_flash_tween.tween_property(material, "shader_parameter/flash_amount", 1.0, half_blink)
-		_flash_tween.tween_property(material, "shader_parameter/flash_amount", 0.0, half_blink)
+		_flash_tween.tween_property(ship_material, "shader_parameter/flash_amount", 1.0, half_blink)
+		_flash_tween.tween_property(ship_material, "shader_parameter/flash_amount", 0.0, half_blink)
 
 
 func _stop_damage_flash() -> void:
 	if _flash_tween and _flash_tween.is_valid():
 		_flash_tween.kill()
 		_flash_tween = null
-	var material: ShaderMaterial = _ship_sprite.material as ShaderMaterial
-	if material != null:
-		material.set("shader_parameter/flash_amount", 0.0)
+	var ship_material: ShaderMaterial = _ship_sprite.material as ShaderMaterial
+	if ship_material != null:
+		ship_material.set("shader_parameter/flash_amount", 0.0)

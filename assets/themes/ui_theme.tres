@@ -1,0 +1,42 @@
+[gd_resource type="Theme" format=3 uid="uid://cg4awuxfyangh"]
+
+[ext_resource type="FontFile" uid="uid://c643kca3slcpb" path="res://assets/fonts/Arcade_Cabinet_Monospaced.ttf" id="1_ndjfm"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_id6vg"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ndjfm"]
+atlas = SubResource("CompressedTexture2D_id6vg")
+region = Rect2(112, 338, 7, 6)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ndjfm"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ftahe"]
+atlas = SubResource("CompressedTexture2D_ndjfm")
+region = Rect2(112, 338, 7, 6)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yvafq"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ffjg"]
+atlas = SubResource("CompressedTexture2D_yvafq")
+region = Rect2(112, 338, 7, 6)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ftahe"]
+load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvafq"]
+atlas = SubResource("CompressedTexture2D_ftahe")
+region = Rect2(4, 337, 104, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p7ghj"]
+texture = SubResource("AtlasTexture_yvafq")
+texture_margin_top = 7.0
+
+[resource]
+default_font = ExtResource("1_ndjfm")
+HSlider/icons/grabber = SubResource("AtlasTexture_ndjfm")
+HSlider/icons/grabber_disabled = SubResource("AtlasTexture_ftahe")
+HSlider/icons/grabber_highlight = SubResource("AtlasTexture_6ffjg")
+HSlider/styles/slider = SubResource("StyleBoxTexture_p7ghj")

@@ -6,9 +6,9 @@ signal play_pressed
 signal settings_pressed
 signal quit_pressed
 
-@onready var _play_button: Button = %PlayButton
-@onready var _settings_button: Button = %SettingsButton
-@onready var _quit_button: Button = %QuitButton
+@onready var _play_button: BaseButton = %PlayButton
+@onready var _settings_button: BaseButton = %SettingsButton
+@onready var _quit_button: BaseButton = %QuitButton
 
 
 func _ready() -> void:

@@ -24,6 +24,8 @@ func show_menu() -> void:
 func _on_play_pressed() -> void:
 	var game: GameScene = GAME_SCENE.instantiate()
 	game.game_over.connect(_on_game_over)
+	game.restart_pressed.connect(_on_play_pressed)
+	game.menu_pressed.connect(show_menu)
 	_set_scene(game)
 
 

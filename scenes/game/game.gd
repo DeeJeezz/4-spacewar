@@ -7,6 +7,8 @@ extends Node2D
 ## * Forwards [signal game_over] from the [RespawnManager] to [Main].
 
 signal game_over(winner_player_index: int, winner_score: int)
+signal restart_pressed
+signal menu_pressed
 
 @export var ship_textures: Array[Texture2D] = []
 
@@ -14,6 +16,8 @@ signal game_over(winner_player_index: int, winner_score: int)
 func _ready() -> void:
 	_assign_ship_textures()
 	$RespawnManager.game_over.connect(game_over.emit)
+	$PauseMenu.restart_pressed.connect(restart_pressed.emit)
+	$PauseMenu.menu_pressed.connect(menu_pressed.emit)
 
 
 func _assign_ship_textures() -> void:

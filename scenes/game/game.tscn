@@ -2,7 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://cmkv2khfif7sl" path="res://assets/img/background/Purple_Nebula_04-512x512.png" id="1_0sr1o"]
 [ext_resource type="PackedScene" uid="uid://dgn2txqvk7ovf" path="res://scenes/player/player.tscn" id="1_sul5r"]
+[ext_resource type="Texture2D" uid="uid://p1412wg4ptn7" path="res://assets/img/ships/player_b_m.png" id="2_2a8rs"]
 [ext_resource type="Script" uid="uid://d0vthlgdxh2fm" path="res://scenes/game/star.gd" id="2_7h61r"]
+[ext_resource type="Texture2D" uid="uid://brdl768fdvvmn" path="res://assets/img/ships/player_r_m.png" id="3_4j704"]
 [ext_resource type="Script" uid="uid://dpyfmjjlpt7ys" path="res://scenes/game/score_manager.gd" id="3_score_mgr"]
 [ext_resource type="Script" uid="uid://dnrkwj0s2yqso" path="res://scenes/game/ui_manager.gd" id="4_ui_mgr"]
 [ext_resource type="Script" uid="uid://bu6wsrj1rm3rn" path="res://scenes/game/game.gd" id="5_game"]
@@ -13,6 +15,7 @@ size = Vector2(680, 400)
 
 [node name="Game" type="Node2D" unique_id=310058948]
 script = ExtResource("5_game")
+ship_textures = Array[Texture2D]([ExtResource("2_2a8rs"), ExtResource("3_4j704")])
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1882594529]
 position = Vector2(256, 256)
@@ -33,7 +36,6 @@ player_index = 2
 position = Vector2(164, 84)
 collision_mask = 0
 motion_mode = 1
-player_index = 1
 
 [node name="Star" type="Area2D" parent="." unique_id=862191497]
 position = Vector2(320, 180)
@@ -51,16 +53,16 @@ minimum_gravity_distance = 150.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Star" unique_id=1252287292]
 shape = SubResource("RectangleShape2D_e0byr")
 
-[node name="ScoreManager" type="Node" parent="."]
+[node name="ScoreManager" type="Node" parent="." unique_id=480763066]
 script = ExtResource("3_score_mgr")
 
-[node name="RespawnManager" type="Node" parent="."]
+[node name="RespawnManager" type="Node" parent="." unique_id=1983819823]
 script = ExtResource("6_respawn_mgr")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=290472052]
 script = ExtResource("4_ui_mgr")
 
-[node name="ScoreHUD" type="Control" parent="UI"]
+[node name="ScoreHUD" type="Control" parent="UI" unique_id=1117117358]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,7 +70,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="P1ScoreLabel" type="Label" parent="UI/ScoreHUD"]
+[node name="P1ScoreLabel" type="Label" parent="UI/ScoreHUD" unique_id=1689734449]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 12.0
@@ -76,7 +78,7 @@ offset_top = 8.0
 theme_override_font_sizes/font_size = 24
 text = "0"
 
-[node name="P2ScoreLabel" type="Label" parent="UI/ScoreHUD"]
+[node name="P2ScoreLabel" type="Label" parent="UI/ScoreHUD" unique_id=1707173220]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
@@ -90,23 +92,23 @@ theme_override_font_sizes/font_size = 24
 text = "0"
 horizontal_alignment = 2
 
-[node name="P1Respawns" type="HBoxContainer" parent="UI/ScoreHUD"]
+[node name="P1Respawns" type="HBoxContainer" parent="UI/ScoreHUD" unique_id=1124855691]
 layout_mode = 1
 offset_left = 12.0
 offset_top = 40.0
 theme_override_constants/separation = 4
 
-[node name="P1RespawnsIcon" type="TextureRect" parent="UI/ScoreHUD/P1Respawns"]
-layout_mode = 2
+[node name="P1RespawnsIcon" type="TextureRect" parent="UI/ScoreHUD/P1Respawns" unique_id=933432699]
 custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
 
-[node name="P1RespawnsLabel" type="Label" parent="UI/ScoreHUD/P1Respawns"]
+[node name="P1RespawnsLabel" type="Label" parent="UI/ScoreHUD/P1Respawns" unique_id=622226463]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "3"
 
-[node name="P2Respawns" type="HBoxContainer" parent="UI/ScoreHUD"]
+[node name="P2Respawns" type="HBoxContainer" parent="UI/ScoreHUD" unique_id=1022887241]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -116,11 +118,11 @@ offset_right = -12.0
 grow_horizontal = 0
 theme_override_constants/separation = 4
 
-[node name="P2RespawnsIcon" type="TextureRect" parent="UI/ScoreHUD/P2Respawns"]
-layout_mode = 2
+[node name="P2RespawnsIcon" type="TextureRect" parent="UI/ScoreHUD/P2Respawns" unique_id=1363783800]
 custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
 
-[node name="P2RespawnsLabel" type="Label" parent="UI/ScoreHUD/P2Respawns"]
+[node name="P2RespawnsLabel" type="Label" parent="UI/ScoreHUD/P2Respawns" unique_id=940336895]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16

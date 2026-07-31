@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="4-spacewar"
+run/main_scene="res://scenes/main/main.tscn"
 config/features=PackedStringArray("4.8", "GL Compatibility")
 config/icon="res://icon.svg"
-run/main_scene="res://scenes/main/main.tscn"
 
 [autoload]
 
@@ -25,7 +25,6 @@ Settings="*res://scripts/autoload/settings.gd"
 window/size/viewport_width=640
 window/size/viewport_height=360
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 
 [file_customization]
 

@@ -8,6 +8,22 @@ extends Node2D
 
 signal game_over(winner_player_index: int, winner_score: int)
 
+@export var ship_textures: Array[Texture2D] = []
+
 
 func _ready() -> void:
+	_assign_ship_textures()
 	$RespawnManager.game_over.connect(game_over.emit)
+
+
+func _assign_ship_textures() -> void:
+	var candidates: Array[Texture2D] = []
+	for texture in ship_textures:
+		if texture != null:
+			candidates.append(texture)
+	if candidates.size() < 2:
+		push_warning("GameScene needs at least 2 ship textures to give players distinct sprites")
+		return
+	candidates.shuffle()
+	$Player1.set_ship_texture(candidates[0])
+	$Player2.set_ship_texture(candidates[1])

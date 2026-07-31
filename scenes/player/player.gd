@@ -77,6 +77,10 @@ func handle_input(delta: float) -> void:
 		)
 
 
+func set_ship_texture(texture: Texture2D) -> void:
+	_ship_sprite.texture = texture
+
+
 func fire_bullet() -> void:
 	var bullet: Bullet = bullet_scene.instantiate()
 	get_parent().add_child(bullet)

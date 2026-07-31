@@ -31,11 +31,11 @@ Keep this file in sync with the project — whenever the architecture changes (n
 |---|---|
 | `scenes/main/main.gd` | Root scene manager — swaps the current screen (`_set_scene()`); preloads `menu.tscn`, `game.tscn`, `settings.tscn`, and `victory.tscn`; connects the game's `game_over` to the victory screen and the menu's `settings_pressed` to the settings screen |
 | `scenes/menu/menu.gd` | `MainMenu` (Control) — emits `play_pressed` / `settings_pressed` / `quit_pressed`; buttons `%PlayButton`, `%SettingsButton`, `%QuitButton` |
-| `scenes/game/game.gd` | `GameScene` — root script of `game.tscn`; forwards `game_over(winner_player_index, winner_score)` from `RespawnManager` to `Main` |
+| `scenes/game/game.gd` | `GameScene` — root script of `game.tscn`; `@export ship_textures` (empty by default, filled in the inspector) — with at least 2 variants it picks 2 random distinct textures and assigns them to the players, otherwise warns without assigning; forwards `game_over(winner_player_index, winner_score)` from `RespawnManager` to `Main` |
 | `scripts/autoload/game.gd` | Autoload singleton providing `Game.SCREEN_SIZE` — the content-space size (`get_visible_rect().size`), set once in `_ready` |
 | `scripts/autoload/settings.gd` | Autoload singleton `Settings` — persists audio volumes (linear 0..1) to `user://user_data.ini` (section `[audio]`, keys `master`/`music`/`effects`); loads on startup and applies them to the `Master`/`Music`/`SFX` audio buses; setter methods `set_master_volume` / `set_music_volume` / `set_effects_volume` each apply and save; creates missing buses as a fallback |
 | `scripts/components/wrapped.gd` | `Wrapped` component — screen-wrap child for any Node2D |
-| `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire; hides on death and `respawn(spawn_position)` restores it |
+| `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire; hides on death and `respawn(spawn_position)` restores it; `set_ship_texture(texture)` swaps the ship sprite |
 | `scenes/player/hurtbox.gd` | `Hurtbox` — emits `damage_received(amount, attacker_player_index)` on bullet hit, `ship_collided` on ship collision |
 | `scenes/player/health.gd` | `Health` component — HP, listens to `Hurtbox` signals, emits `died(attacker_player_index)` when killed; `kill()` emits index `0` (collision scores nobody); `reset()` restores full HP |
 | `scenes/bullet/bullet.gd` | `Bullet` with speed and TTL; carries `owner_player_index` of the shooter |
@@ -53,6 +53,8 @@ Audio buses are defined in `default_bus_layout.tres` (`Master`, `Music`, `SFX`);
 ## Testing
 
 Tests live in `tests/` and run headless via `./run_tests.sh`.
+
+Don't read test files without necessity — only consult `tests/test_*.gd` when modifying tests or investigating a failing test; the table below documents their roles.
 
 | Path | Role |
 |---|---|

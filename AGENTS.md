@@ -20,8 +20,12 @@ After any change to a scene (`.tscn`) or its scripts, launch that scene in the G
 
 ## Architecture
 
+`run/main_scene` is `scenes/main/main.tscn` — the persistent root.
+
 | Path | Role |
 |---|---|
+| `scenes/main/main.gd` | Root scene manager — swaps the current screen (`_set_scene()`); preloads `menu.tscn` and `game.tscn` |
+| `scenes/menu/menu.gd` | `MainMenu` (Control) — emits `play_pressed` / `quit_pressed`; buttons `%PlayButton`, `%QuitButton` |
 | `scripts/autoload/game.gd` | Autoload singleton providing `Game.SCREEN_SIZE` |
 | `scripts/components/wrapped.gd` | `Wrapped` component — screen-wrap child for any Node2D |
 | `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire |
@@ -29,6 +33,8 @@ After any change to a scene (`.tscn`) or its scripts, launch that scene in the G
 | `scenes/player/health.gd` | `Health` component — HP, listens to `Hurtbox` signals, emits `died` when killed |
 | `scenes/bullet/bullet.gd` | `Bullet` with speed and TTL |
 | `scenes/game/star.gd` | `Star` — orbital gravity (wrap-aware offset) |
+
+`menu.tscn` / `game.tscn` are children of `Main` that get swapped — never instantiated as the main scene.
 
 ## Input (no Input Map — actions defined in `project.godot`)
 
@@ -52,6 +58,6 @@ Player index is `@export_enum("LEFT:1", "RIGHT:2")` — set to 1 or 2 in the sce
 ## Gotchas
 
 - `2d/default_gravity=0.0` — no built-in gravity. All gravity comes from `Star` nodes.
-- Bullets are added to `get_tree().current_scene` (not as children of the player).
+- Bullets are added to `get_parent()` — the `Game` scene root (not as children of the player). `get_tree().current_scene` is always `Main`, not the game.
 - Player velocity is capped to 50 via `limit_length`.
 - `Wrapped` component reads `Game.SCREEN_SIZE` from the autoload singleton.

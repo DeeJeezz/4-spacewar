@@ -33,12 +33,16 @@ var _initial_collision_mask: int
 @onready var _hurtbox: Hurtbox = $Hurtbox
 @onready var _ship_sprite: Sprite2D = $Sprite2D
 @onready var _explosion: AnimatedSprite2D = $Explosion
+@onready var _shoot_sfx: AudioStreamPlayer2D = $ShootSFX
+@onready var _damage_sfx: AudioStreamPlayer2D = $DamageSFX
+@onready var _explosion_sfx: AudioStreamPlayer2D = $ExplosionSFX
 
 
 func _ready() -> void:
 	_initial_collision_layer = collision_layer
 	_initial_collision_mask = collision_mask
 	_health.died.connect(_on_died)
+	EventBus.ship_damage_received.connect(_on_ship_damage_received)
 
 
 func _process(delta: float) -> void:
@@ -87,6 +91,7 @@ func fire_bullet() -> void:
 	bullet.global_position = bullet_spawn_point.global_position
 	bullet.rotation = rotation
 	bullet.owner_player_index = player_index
+	_shoot_sfx.play()
 
 
 func respawn(spawn_position: Vector2) -> void:
@@ -130,9 +135,19 @@ func _on_died(_attacker_player_index: int) -> void:
 	_ship_sprite.visible = false
 	_explosion.show()
 	_explosion.play(str(player_index))
+	_explosion_sfx.play()
 	_explosion.animation_finished.connect(_on_explosion_finished)
 
 
 func _on_explosion_finished() -> void:
 	_explosion.animation_finished.disconnect(_on_explosion_finished)
 	hide()
+
+
+func _on_ship_damage_received(
+	_amount: int,
+	damaged_player_index: int,
+	_attacker_player_index: int,
+) -> void:
+	if damaged_player_index == player_index:
+		_damage_sfx.play()

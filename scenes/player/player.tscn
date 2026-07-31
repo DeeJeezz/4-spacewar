@@ -188,3 +188,12 @@ scale = Vector2(0.4, 0.4)
 sprite_frames = SubResource("SpriteFrames_e0byr")
 animation = &"idle"
 frame_progress = 0.6929318
+
+[node name="ShootSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000001]
+bus = &"SFX"
+
+[node name="DamageSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000002]
+bus = &"SFX"
+
+[node name="ExplosionSFX" type="AudioStreamPlayer2D" parent="." unique_id=1900000003]
+bus = &"SFX"

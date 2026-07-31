@@ -38,7 +38,7 @@ Keep this file in sync with the project — whenever the architecture changes (n
 | `scripts/autoload/settings.gd` | Autoload singleton `Settings` — persists audio volumes (linear 0..1) to `user://user_data.ini` (section `[audio]`, keys `master`/`music`/`effects`); loads on startup and applies them to the `Master`/`Music`/`SFX` audio buses; setter methods `set_master_volume` / `set_music_volume` / `set_effects_volume` each apply and save; creates missing buses as a fallback |
 | `scripts/autoload/event_bus.gd` | Autoload singleton `EventBus` — global signal bus decoupling gameplay components; `ship_damage_received(amount, damaged_player_index, attacker_player_index)` is emitted by a `Hurtbox` on bullet hit |
 | `scripts/components/wrapped.gd` | `Wrapped` component — screen-wrap child for any Node2D |
-| `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire; hides on death and `respawn(spawn_position)` restores it; `set_ship_texture(texture)` swaps the ship sprite |
+| `scenes/player/player.gd` | `Player` ship (CharacterBody2D) — thrust, rotation, fire; hides on death and `respawn(spawn_position)` restores it; `set_ship_texture(texture)` swaps the ship sprite; plays `ShootSFX` / `DamageSFX` / `ExplosionSFX` (three `AudioStreamPlayer2D` children of `player.tscn`, `bus` `SFX`) on fire, on damage (via `EventBus.ship_damage_received`), and on death |
 | `scenes/player/hurtbox.gd` | `Hurtbox` — emits `EventBus.ship_damage_received(amount, damaged_player_index, attacker_player_index)` on bullet hit, `ship_collided` on ship collision |
 | `scenes/player/health.gd` | `Health` component — HP, listens to `EventBus.ship_damage_received` for bullet damage (ignores hits on the other ship via `damaged_player_index`) and `Hurtbox.ship_collided` for instant kills, emits `died(attacker_player_index)` when killed; `kill()` emits index `0` (collision scores nobody); `reset()` restores full HP |
 | `scenes/bullet/bullet.gd` | `Bullet` with speed and TTL; carries `owner_player_index` of the shooter |
@@ -50,7 +50,7 @@ Keep this file in sync with the project — whenever the architecture changes (n
 | `scenes/settings/settings.gd` | `SettingsScreen` (Control) — three `HSlider`s for master/music/effects volume; writes each change to the `Settings` autoload; button `%BackButton` emits `back_pressed` |
 | `scenes/victory/victory.gd` | `VictoryScreen` (Control) — `setup(winner_index, score)` fills labels; buttons `%RestartButton` / `%MenuButton` emit `restart_pressed` / `menu_pressed` |
 
-`menu.tscn` / `game.tscn` / `settings.tscn` / `victory.tscn` are children of `Main` that get swapped — never instantiated as the main scene.
+`menu.tscn` / `game.tscn` / `settings.tscn` / `victory.tscn` are children of `Main` that get swapped — never instantiated as the main scene. Each of `menu.tscn`, `settings.tscn`, and `game.tscn` has a `Music` `AudioStreamPlayer` child (bus `Music`, `autoplay`, stream assigned manually in the inspector).
 
 Audio buses are defined in `default_bus_layout.tres` (`Master`, `Music`, `SFX`); audio volumes are applied via `AudioServer`.
 

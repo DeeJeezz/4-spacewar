@@ -7,9 +7,9 @@ https://20_games_challenge.gitlab.io/games/spacewar/
 
 ## Where to play
 
-Itch.io - TBD
+Itch.io - https://deejeezz.itch.io/spacewar
 
-Github Pages - TBD
+Github Pages - https://deejeezz.github.io/4-spacewar/
 
 ## Description
 

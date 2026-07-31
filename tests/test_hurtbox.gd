@@ -7,8 +7,8 @@ const Fixtures := preload("res://tests/fixtures.gd")
 func test_enemy_bullet_damages(framework: RefCounted) -> void:
 	var hurtbox: Hurtbox = _make_hurtbox()
 	var hits: Array = []
-	hurtbox.damage_received.connect(
-		func(amount: int, attacker: int) -> void:
+	EventBus.ship_damage_received.connect(
+		func(amount: int, _damaged: int, attacker: int) -> void:
 			hits.append([amount, attacker]),
 	)
 	var bullet: Bullet = Fixtures.make_bullet(2)
@@ -22,8 +22,8 @@ func test_enemy_bullet_damages(framework: RefCounted) -> void:
 func test_own_bullet_ignored(framework: RefCounted) -> void:
 	var hurtbox: Hurtbox = _make_hurtbox()
 	var hits: Array = []
-	hurtbox.damage_received.connect(
-		func(amount: int, attacker: int) -> void:
+	EventBus.ship_damage_received.connect(
+		func(_amount: int, _damaged: int, attacker: int) -> void:
 			hits.append(attacker),
 	)
 	var bullet: Bullet = Fixtures.make_bullet(1)

@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Game="*uid://bkpgxw7srpp3a"
 Settings="*res://scripts/autoload/settings.gd"
+EventBus="*res://scripts/autoload/event_bus.gd"
 
 [display]
 

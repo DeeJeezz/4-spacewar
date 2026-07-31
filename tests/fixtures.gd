@@ -21,14 +21,7 @@ static func make_bullet(owner_player_index: int) -> Bullet:
 
 
 static func make_player_with_health() -> Node:
-	var parent := Node.new()
-	var hurtbox: Hurtbox = Hurtbox.new()
-	hurtbox.name = "Hurtbox"
-	parent.add_child(hurtbox)
-	var health: Health = Health.new()
-	health.name = "Health"
-	parent.add_child(health)
-	return parent
+	return make_player(1)
 
 
 static func make_game_root() -> Node:

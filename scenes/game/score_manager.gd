@@ -4,10 +4,10 @@ extends Node
 ##
 ## Usage: [br]
 ## * Add as a child of the [Game] scene root. [br]
-## * Listens to each [Player]'s [Hurtbox] and [Health] signals: hitting an enemy
-## ship grants [constant HIT_POINTS], destroying one grants [constant KILL_POINTS].
-## [br]
-## * The [param attacker_player_index] carried by the signals identifies the
+## * Listens to [signal EventBus.ship_damage_received] and each [Player]'s
+## [Health] [signal Health.died]: hitting an enemy ship grants
+## [constant HIT_POINTS], destroying one grants [constant KILL_POINTS]. [br]
+## * The [param attacker_player_index] carried by the events identifies the
 ## player who should score. Ship-vs-ship collisions carry index 0 and score nothing.
 
 signal score_changed(player_index: int, score: int)
@@ -19,6 +19,7 @@ var scores: Dictionary = { 1: 0, 2: 0 }
 
 
 func _ready() -> void:
+	EventBus.ship_damage_received.connect(_on_damage_received)
 	_register_player(get_parent().get_node("Player1"))
 	_register_player(get_parent().get_node("Player2"))
 
@@ -31,11 +32,14 @@ func add_score(player_index: int, points: int) -> void:
 
 
 func _register_player(player: Player) -> void:
-	player.get_node("Hurtbox").damage_received.connect(_on_damage_received)
 	player.get_node("Health").died.connect(_on_died)
 
 
-func _on_damage_received(_amount: int, attacker_player_index: int) -> void:
+func _on_damage_received(
+	_amount: int,
+	_damaged_player_index: int,
+	attacker_player_index: int,
+) -> void:
 	add_score(attacker_player_index, HIT_POINTS)
 
 

@@ -25,7 +25,7 @@ func test_add_score(framework: RefCounted) -> void:
 
 func test_hit_and_kill_points(framework: RefCounted) -> void:
 	var score_manager: ScoreManager = _make_score_manager()
-	score_manager._on_damage_received(1, 2)
+	score_manager._on_damage_received(1, 1, 2)
 	framework.check_equal(
 		score_manager.scores[2],
 		ScoreManager.HIT_POINTS,
@@ -49,8 +49,7 @@ func test_signal_wiring(framework: RefCounted) -> void:
 	var root: Node = Fixtures.make_game_root()
 	add_child(root)
 	var score_manager: ScoreManager = root.get_node("ScoreManager")
-	var player2_hurtbox: Hurtbox = root.get_node("Player2/Hurtbox")
-	player2_hurtbox.damage_received.emit(1, 1)
+	EventBus.ship_damage_received.emit(1, 2, 1)
 	framework.check_equal(
 		score_manager.scores[1],
 		ScoreManager.HIT_POINTS,

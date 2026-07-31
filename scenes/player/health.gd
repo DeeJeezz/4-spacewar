@@ -4,8 +4,9 @@ extends Node
 ##
 ## Usage: [br]
 ## * Set [param max_health] to the starting health value. [br]
-## * Listens to the sibling [Hurtbox] signals: bullets deal damage, ship
-## collisions kill instantly.
+## * Listens to [signal EventBus.ship_damage_received] for bullet damage (only
+## when the damage targets this ship) and to the sibling [Hurtbox]
+## [signal Hurtbox.ship_collided] for instant kills.
 
 signal health_changed(current: int, max_health: int)
 signal died(attacker_player_index: int)
@@ -18,12 +19,14 @@ var is_dead: bool = false
 
 func _ready() -> void:
 	current_health = max_health
+	EventBus.ship_damage_received.connect(take_damage)
 	var hurtbox: Hurtbox = get_parent().get_node("Hurtbox")
-	hurtbox.damage_received.connect(take_damage)
 	hurtbox.ship_collided.connect(kill)
 
 
-func take_damage(amount: int, attacker_player_index: int) -> void:
+func take_damage(amount: int, damaged_player_index: int, attacker_player_index: int) -> void:
+	if get_parent().player_index != damaged_player_index:
+		return
 	if is_dead or amount <= 0:
 		return
 	current_health = maxi(current_health - amount, 0)

@@ -2,7 +2,6 @@ class_name Hurtbox
 extends Area2D
 ## Hurtbox for the player.
 
-signal damage_received(amount: int, attacker_player_index: int)
 signal ship_collided
 
 
@@ -16,7 +15,11 @@ func _on_area_entered(area: Area2D) -> void:
 		var player: Player = get_parent()
 		if area.owner_player_index == player.player_index:
 			return
-		damage_received.emit(area.damage, area.owner_player_index)
+		EventBus.ship_damage_received.emit(
+			area.damage,
+			player.player_index,
+			area.owner_player_index,
+		)
 		area.queue_free()
 
 

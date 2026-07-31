@@ -17,10 +17,10 @@ func test_take_damage_reduces_health(framework: RefCounted) -> void:
 		func(current: int, max_health: int) -> void:
 			changed.append([current, max_health]),
 	)
-	health.take_damage(1, 2)
+	health.take_damage(1, 1, 2)
 	framework.check_equal(health.current_health, 2, "one damage point reduces health")
 	framework.check_equal(changed, [[2, 3]], "health_changed emitted with remaining health")
-	health.take_damage(2, 2)
+	health.take_damage(2, 1, 2)
 	framework.check_equal(health.current_health, 0, "health clamps at zero")
 	framework.check_true(health.is_dead, "zero health kills the player")
 
@@ -32,20 +32,30 @@ func test_died_emitted_once(framework: RefCounted) -> void:
 		func(attacker: int) -> void:
 			deaths.append(attacker),
 	)
-	health.take_damage(3, 1)
+	health.take_damage(3, 1, 1)
 	framework.check_equal(health.current_health, 0, "lethal damage zeroes health")
 	framework.check_equal(deaths, [1], "died emitted once with the attacker index")
-	health.take_damage(1, 2)
+	health.take_damage(1, 1, 2)
 	framework.check_equal(deaths, [1], "no further death once already dead")
 	framework.check_equal(health.current_health, 0, "no damage applied after death")
 
 
 func test_non_positive_damage_ignored(framework: RefCounted) -> void:
 	var health: Health = _make_health()
-	health.take_damage(0, 1)
+	health.take_damage(0, 1, 1)
 	framework.check_equal(health.current_health, health.max_health, "zero damage ignored")
-	health.take_damage(-3, 1)
+	health.take_damage(-3, 1, 1)
 	framework.check_equal(health.current_health, health.max_health, "negative damage ignored")
+
+
+func test_damage_ignored_for_other_ship(framework: RefCounted) -> void:
+	var health: Health = _make_health()
+	health.take_damage(1, 2, 1)
+	framework.check_equal(
+		health.current_health,
+		health.max_health,
+		"damage aimed at another ship is ignored",
+	)
 
 
 func test_kill(framework: RefCounted) -> void:
@@ -65,7 +75,7 @@ func test_kill(framework: RefCounted) -> void:
 
 func test_reset(framework: RefCounted) -> void:
 	var health: Health = _make_health()
-	health.take_damage(1, 1)
+	health.take_damage(1, 1, 1)
 	health.kill()
 	framework.check_true(health.is_dead, "player is dead before reset")
 	var changed: Array = []

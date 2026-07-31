@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://dnrkwj0s2yqso" path="res://scenes/game/ui_manager.gd" id="4_ui_mgr"]
 [ext_resource type="Script" uid="uid://bu6wsrj1rm3rn" path="res://scenes/game/game.gd" id="5_game"]
 [ext_resource type="Script" uid="uid://br8ff0salyllp" path="res://scenes/game/respawn_manager.gd" id="6_respawn_mgr"]
+[ext_resource type="Script" uid="uid://b3tdftvcxpxfd" path="res://scenes/game/camera_shake.gd" id="7_camera"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0byr"]
 size = Vector2(680, 400)
@@ -36,6 +37,9 @@ player_index = 2
 position = Vector2(164, 84)
 collision_mask = 0
 motion_mode = 1
+
+[node name="Camera" type="Camera2D" parent="." unique_id=410251043]
+script = ExtResource("7_camera")
 
 [node name="Star" type="Area2D" parent="." unique_id=862191497]
 position = Vector2(320, 180)

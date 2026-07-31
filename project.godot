@@ -21,6 +21,10 @@ Game="*uid://bkpgxw7srpp3a"
 Settings="*res://scripts/autoload/settings.gd"
 EventBus="*res://scripts/autoload/event_bus.gd"
 
+[debug]
+
+gdscript/warnings/unused_signal=0
+
 [display]
 
 window/size/viewport_width=640

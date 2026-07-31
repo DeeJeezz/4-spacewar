@@ -2,9 +2,30 @@
 
 [ext_resource type="Script" uid="uid://ctmht7rskeh0o" path="res://scenes/bullet/bullet.gd" id="1_7c8un"]
 [ext_resource type="Texture2D" uid="uid://cdthk1nd7ng7l" path="res://assets/img/bullets/plasma_1.png" id="2_83itf"]
+[ext_resource type="Shader" uid="uid://dpxwh21wcnu31" path="res://assets/shaders/bullet_glow.gdshader" id="3_glow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0byr"]
-size = Vector2(4, 8)
+size = Vector2(4, 16)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glow"]
+shader = ExtResource("3_glow")
+shader_parameter/core_color = Color(0.4, 0.8, 1, 1)
+shader_parameter/glow_color = Color(0.25, 0.6, 1, 1)
+shader_parameter/particle_color = Color(0.8, 0.95, 1, 1)
+shader_parameter/core_length = 0.20000000787006
+shader_parameter/core_width = 0.18
+shader_parameter/core_brightness = 2.0
+shader_parameter/glow_strength = 1.2
+shader_parameter/glow_size = 0.20000000787006
+shader_parameter/pulse_speed = 6.0
+shader_parameter/particle_count = 10
+shader_parameter/particle_size = 0.12
+shader_parameter/particle_speed = 0.8
+shader_parameter/particle_lifetime = 0.7
+shader_parameter/particle_spread = 0.10000000475
+shader_parameter/tail_bias = 0.8950000425125
+shader_parameter/pixel_size = 0.5
+shader_parameter/shade_levels = 2.0000000475
 
 [node name="Bullet" type="Area2D" unique_id=820324522]
 script = ExtResource("1_7c8un")
@@ -15,4 +36,6 @@ ttl = 1.0
 shape = SubResource("RectangleShape2D_e0byr")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2139612579]
+material = SubResource("ShaderMaterial_glow")
+scale = Vector2(2, 2)
 texture = ExtResource("2_83itf")

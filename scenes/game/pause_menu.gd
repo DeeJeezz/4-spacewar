@@ -18,6 +18,7 @@ signal menu_pressed
 
 
 func _ready() -> void:
+	visible = false
 	_resume_button.pressed.connect(_on_resume_pressed)
 	_restart_button.pressed.connect(_on_restart_pressed)
 	_menu_button.pressed.connect(_on_menu_pressed)

@@ -40,8 +40,6 @@ The game was initially controlled via switches on the computer, but a student at
 
 ### UI
 
-- https://catterpxl.itch.io/sci-fi-buttons
-
 ### Music
 
 - https://newc-42.itch.io/spacewave

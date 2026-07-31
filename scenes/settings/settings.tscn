@@ -4,27 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://cmkv2khfif7sl" path="res://assets/img/background/Purple_Nebula_04-512x512.png" id="2_bg"]
 [ext_resource type="AudioStream" uid="uid://dyp0g5awp17ks" path="res://assets/audio/music/OutOfTheOrbit.mp3" id="3_tt6xx"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tt6xx"]
-load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1slea"]
-atlas = SubResource("CompressedTexture2D_tt6xx")
-region = Rect2(4, 181, 68, 30)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_v1hle"]
-load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vghtj"]
-atlas = SubResource("CompressedTexture2D_v1hle")
-region = Rect2(146, 185, 68, 26)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h6son"]
-load_path = "res://.godot/imported/sci_fi_buttons_dark.png-ed4c7a97c1f7d3531d8374637b34b5d2.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vimye"]
-atlas = SubResource("CompressedTexture2D_h6son")
-region = Rect2(75, 183, 68, 28)
-
 [node name="Settings" type="Control" unique_id=1194669686]
 layout_mode = 3
 anchors_preset = 15
@@ -147,14 +126,11 @@ text = "100%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="BackButton" type="TextureButton" parent="CenterContainer/VBoxContainer" unique_id=388122915]
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=513525969]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-texture_normal = SubResource("AtlasTexture_1slea")
-texture_pressed = SubResource("AtlasTexture_vghtj")
-texture_hover = SubResource("AtlasTexture_vimye")
-stretch_mode = 5
+text = "Back"
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1797418309]
 stream = ExtResource("3_tt6xx")

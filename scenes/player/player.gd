@@ -9,6 +9,9 @@ extends CharacterBody2D
 ## * Set [param bullet_scene] to the player's bullet scene. [br]
 ## * Set [param shoot_cooldown] to adjust the player's shoot cooldown.
 
+const HEALTH_BAR_OFFSET: float = 26.0
+const HEALTH_BAR_HALF_WIDTH: float = 20.0
+
 @export var thrust_strength: float = 50.0
 @export var rotation_speed: float = 2.0
 @export var bullet_scene: PackedScene
@@ -39,17 +42,22 @@ var _initial_collision_mask: int
 @onready var _damage_sfx: AudioStreamPlayer2D = $DamageSFX
 @onready var _explosion_sfx: AudioStreamPlayer2D = $ExplosionSFX
 @onready var _engine_sfx: AudioStreamPlayer2D = $EngineSFX
+@onready var _health_bar: ProgressBar = $HealthBar
 
 
 func _ready() -> void:
 	_initial_collision_layer = collision_layer
 	_initial_collision_mask = collision_mask
 	_health.died.connect(_on_died)
+	_health.health_changed.connect(_on_health_changed)
 	EventBus.ship_damage_received.connect(_on_ship_damage_received)
+	_on_health_changed(_health.current_health, _health.max_health)
 
 
 func _process(delta: float) -> void:
 	handle_input(delta)
+	_health_bar.position = Vector2(-HEALTH_BAR_HALF_WIDTH, -HEALTH_BAR_OFFSET).rotated(-rotation)
+	_health_bar.rotation = -rotation
 
 
 func _physics_process(delta: float) -> void:
@@ -110,6 +118,7 @@ func respawn(spawn_position: Vector2) -> void:
 	collision_mask = _initial_collision_mask
 	_hurtbox.monitoring = true
 	_ship_sprite.visible = true
+	_health_bar.visible = true
 	_explosion.hide()
 	_exhaust.stop()
 	_exhaust.modulate.a = 0.0
@@ -141,6 +150,7 @@ func _on_died(_attacker_player_index: int) -> void:
 	set_deferred(&"collision_mask", 0)
 	_hurtbox.set_deferred(&"monitoring", false)
 	_ship_sprite.visible = false
+	_health_bar.visible = false
 	_explosion.show()
 	_explosion.play(str(player_index))
 	_explosion_sfx.play()
@@ -162,6 +172,11 @@ func _on_ship_damage_received(
 	if damaged_player_index == player_index:
 		_damage_sfx.play()
 		_play_damage_flash()
+
+
+func _on_health_changed(current: int, max_health: int) -> void:
+	_health_bar.max_value = max_health
+	_health_bar.value = current
 
 
 func _play_damage_flash() -> void:

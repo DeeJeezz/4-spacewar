@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://p1412wg4ptn7" path="res://assets/img/ships/player_b_m.png" id="3_p47bc"]
 [ext_resource type="Script" uid="uid://cqn1juna4qp53" path="res://scenes/player/hurtbox.gd" id="4_lvxji"]
 [ext_resource type="Script" path="res://scenes/player/health.gd" id="31_health"]
+[ext_resource type="Shader" path="res://scenes/player/damage_flash.gdshader" id="32_damage_flash"]
 [ext_resource type="Texture2D" uid="uid://cklq1sjd74yg7" path="res://assets/img/fx/explosions/explosion_1_01.png" id="6_007i1"]
 [ext_resource type="Texture2D" uid="uid://gtuy4ddj0t74" path="res://assets/img/fx/explosions/explosion_1_02.png" id="7_6cv16"]
 [ext_resource type="Texture2D" uid="uid://u1uq0u257g6m" path="res://assets/img/fx/explosions/explosion_1_03.png" id="8_j4nxn"]
@@ -140,6 +141,15 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_damage_flash"]
+resource_local_to_scene = true
+shader = ExtResource("32_damage_flash")
+shader_parameter/blink_count = 3
+shader_parameter/blink_duration = 0.5
+shader_parameter/flash_amount = 0.0
+shader_parameter/flash_color = Color(1, 0.2, 0.2, 1)
+shader_parameter/flash_strength = 1.0
+
 [node name="Player" type="CharacterBody2D" unique_id=121888796 node_paths=PackedStringArray("bullet_spawn_point")]
 slide_on_ceiling = false
 platform_floor_layers = 4294901760
@@ -156,6 +166,7 @@ shape = SubResource("RectangleShape2D_e0byr")
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("3_p47bc")
 offset = Vector2(1, 0)
+material = SubResource("ShaderMaterial_damage_flash")
 
 [node name="Wrapped" type="Node" parent="." unique_id=162760190]
 script = ExtResource("2_dovo2")

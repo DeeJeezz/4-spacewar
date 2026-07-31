@@ -9,6 +9,7 @@ size = Vector2(4, 8)
 [node name="Bullet" type="Area2D" unique_id=820324522]
 script = ExtResource("1_7c8un")
 speed = 200.0
+ttl = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=131839815]
 shape = SubResource("RectangleShape2D_e0byr")

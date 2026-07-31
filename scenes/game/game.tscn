@@ -19,12 +19,30 @@ size = Vector2(680, 400)
 script = ExtResource("5_game")
 ship_textures = Array[Texture2D]([ExtResource("2_2a8rs"), ExtResource("3_4j704")])
 
-[node name="Background" type="Sprite2D" parent="." unique_id=1882594529]
+[node name="Backgrounds" type="Node2D" parent="." unique_id=1990451009]
+
+[node name="Background" type="Sprite2D" parent="Backgrounds" unique_id=1882594529]
 position = Vector2(256, 256)
 texture = ExtResource("1_0sr1o")
 
-[node name="Background2" type="Sprite2D" parent="." unique_id=221129573]
+[node name="Background2" type="Sprite2D" parent="Backgrounds" unique_id=221129573]
 position = Vector2(768, 256)
+texture = ExtResource("1_0sr1o")
+
+[node name="Background3" type="Sprite2D" parent="Backgrounds" unique_id=1307800219]
+position = Vector2(-256, 256)
+texture = ExtResource("1_0sr1o")
+
+[node name="Background4" type="Sprite2D" parent="Backgrounds" unique_id=549958466]
+position = Vector2(256, -256)
+texture = ExtResource("1_0sr1o")
+
+[node name="Background5" type="Sprite2D" parent="Backgrounds" unique_id=391154386]
+position = Vector2(-256, -256)
+texture = ExtResource("1_0sr1o")
+
+[node name="Background6" type="Sprite2D" parent="Backgrounds" unique_id=1134436039]
+position = Vector2(768, -256)
 texture = ExtResource("1_0sr1o")
 
 [node name="Player2" parent="." unique_id=121888796 instance=ExtResource("1_sul5r")]
@@ -39,8 +57,11 @@ position = Vector2(164, 84)
 collision_mask = 0
 motion_mode = 1
 
-[node name="Camera" type="Camera2D" parent="." unique_id=410251043]
+[node name="ShakingCamera" type="Camera2D" parent="." unique_id=410251043]
 script = ExtResource("7_camera")
+shake_intensity = 6.0
+shake_frequency = 12.0
+intensity_per_damage = 2.0
 
 [node name="Star" type="Area2D" parent="." unique_id=862191497]
 position = Vector2(320, 180)
@@ -135,7 +156,7 @@ text = "3"
 horizontal_alignment = 2
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1800000001]
-bus = &"Music"
 autoplay = true
+bus = &"Music"
 
-[node name="PauseMenu" parent="." instance=ExtResource("8_pause_menu")]
+[node name="PauseMenu" parent="." unique_id=1731465827 instance=ExtResource("8_pause_menu")]

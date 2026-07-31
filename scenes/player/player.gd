@@ -24,6 +24,8 @@ var _can_shoot: bool = true
 
 var _exhaust_tween: Tween
 
+var _flash_tween: Tween
+
 var _initial_collision_layer: int
 
 var _initial_collision_mask: int
@@ -108,6 +110,7 @@ func respawn(spawn_position: Vector2) -> void:
 	_exhaust.stop()
 	_exhaust.modulate.a = 0.0
 	_health.reset()
+	_stop_damage_flash()
 	show()
 	set_process(true)
 	set_physics_process(true)
@@ -137,6 +140,7 @@ func _on_died(_attacker_player_index: int) -> void:
 	_explosion.play(str(player_index))
 	_explosion_sfx.play()
 	_explosion.animation_finished.connect(_on_explosion_finished)
+	_stop_damage_flash()
 
 
 func _on_explosion_finished() -> void:
@@ -151,3 +155,27 @@ func _on_ship_damage_received(
 ) -> void:
 	if damaged_player_index == player_index:
 		_damage_sfx.play()
+		_play_damage_flash()
+
+
+func _play_damage_flash() -> void:
+	var material: ShaderMaterial = _ship_sprite.material as ShaderMaterial
+	if material == null:
+		return
+	_stop_damage_flash()
+	var blink_count: int = maxi(int(material.get_shader_parameter("blink_count")), 1)
+	var blink_duration: float = maxf(float(material.get_shader_parameter("blink_duration")), 0.1)
+	var half_blink: float = blink_duration / (2.0 * blink_count)
+	_flash_tween = create_tween()
+	for _i in blink_count:
+		_flash_tween.tween_property(material, "shader_parameter/flash_amount", 1.0, half_blink)
+		_flash_tween.tween_property(material, "shader_parameter/flash_amount", 0.0, half_blink)
+
+
+func _stop_damage_flash() -> void:
+	if _flash_tween and _flash_tween.is_valid():
+		_flash_tween.kill()
+		_flash_tween = null
+	var material: ShaderMaterial = _ship_sprite.material as ShaderMaterial
+	if material != null:
+		material.set("shader_parameter/flash_amount", 0.0)

@@ -20,6 +20,10 @@ func _ready() -> void:
 	$PauseMenu.menu_pressed.connect(menu_pressed.emit)
 
 
+func set_player2_is_ai(is_ai: bool) -> void:
+	$Player2.is_ai = is_ai
+
+
 func _assign_ship_textures() -> void:
 	var candidates: Array[Texture2D] = []
 	for texture in ship_textures:

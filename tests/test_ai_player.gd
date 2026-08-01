@@ -94,6 +94,30 @@ func test_ai_retreats_when_enemy_is_close(framework: RefCounted) -> void:
 	_cleanup(duel)
 
 
+func test_ai_weaves_in_the_combat_band(framework: RefCounted) -> void:
+	var duel := _make_ai_duel()
+	var ai: EnemyAI = duel.ai
+	ai.strafe_interval = 0.02
+	ai.strafe_duration = 0.02
+	ai._phase_timer = ai.strafe_interval
+	duel.player2.global_position = Vector2.ZERO
+	duel.player2.rotation = 0.0
+	duel.player1.global_position = Vector2(100, 0)
+
+	for i in 30:
+		ai._process(0.016)
+
+	framework.check_true(ai._weaving, "alternates into the weave phase in the combat band")
+	framework.check_true(duel.player2._thrust_direction.length() > 0.0, "thrusts while weaving")
+	framework.check_almost_equal(
+		ai._heading.dot(Vector2.RIGHT),
+		0.0,
+		0.001,
+		"weave runs perpendicular to the enemy",
+	)
+	_cleanup(duel)
+
+
 func test_ai_dodges_an_incoming_bullet(framework: RefCounted) -> void:
 	var duel := _make_ai_duel()
 	var ai: EnemyAI = duel.ai

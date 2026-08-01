@@ -9,26 +9,32 @@ extends Node
 ## ([method Player.rotate_ship], [method Player.set_thrusting],
 ## [method Player.try_fire]). [br]
 ## * Behavior: keeps the ship at a comfortable distance from the enemy, aims and
-## fires at it with imperfect lead and accuracy, and dodges incoming bullets it
-## has time to react to. Decisions are re-planned every [member think_interval]
-## seconds, so the ship keeps executing stale orders between ticks.
+## fires at it with imperfect lead and accuracy, weaves perpendicular to the line
+## of fire between engagement holds, and dodges incoming bullets it has time to
+## react to. Decisions are re-planned every [member think_interval] seconds, so
+## the ship keeps executing stale orders between ticks.
 
 const TURN_DEADZONE: float = 0.02
 
-const FIRE_JITTER_MIN: float = 0.9
+const FIRE_JITTER_MIN: float = 0.95
 
-const FIRE_JITTER_MAX: float = 1.3
+const FIRE_JITTER_MAX: float = 1.1
+
+const COARSE_AIM_WINDOW: float = 4.0
 
 @export_group("Combat")
 @export var aim_tolerance: float = 0.15
 @export var max_fire_range: float = 420.0
 @export var bullet_speed: float = 100.0
-@export var lead_factor: float = 0.6
+@export var lead_factor: float = 0.8
 
 @export_group("Movement")
 @export var approach_range: float = 260.0
 @export var retreat_range: float = 130.0
 @export var retreat_hysteresis: float = 50.0
+@export var strafe_blend: float = 0.4
+@export var strafe_interval: float = 1.2
+@export var strafe_duration: float = 0.5
 
 @export_group("Dodging")
 @export var dodge_radius: float = 55.0
@@ -36,11 +42,11 @@ const FIRE_JITTER_MAX: float = 1.3
 @export var dodge_duration: float = 0.5
 
 @export_group("Fairness")
-@export var think_interval: float = 0.15
+@export var think_interval: float = 0.1
 @export var reaction_time: float = 0.25
-@export var accuracy: float = 0.8
-@export var aim_error: float = 0.4
-@export var lead_accuracy: float = 0.7
+@export var accuracy: float = 0.95
+@export var aim_error: float = 0.2
+@export var lead_accuracy: float = 0.85
 
 var _player: Player
 
@@ -58,9 +64,16 @@ var _dodge_sign: float = 1.0
 
 var _dodge_heading: Vector2 = Vector2.ZERO
 
+var _weaving: bool = false
+
+var _phase_timer: float = 0.0
+
+var _strafe_sign: float = 1.0
+
 
 func _ready() -> void:
 	_player = get_parent() as Player
+	_phase_timer = strafe_interval
 
 
 func _process(delta: float) -> void:
@@ -77,16 +90,17 @@ func _process(delta: float) -> void:
 	_think_timer -= delta
 	if _think_timer <= 0.0:
 		_think_timer = think_interval
-		_think(enemy)
+		_think(enemy, delta)
 
 	_steer_towards(_heading, delta)
 	_player.set_thrusting(_thrusting)
 
 
-func _think(enemy: Player) -> void:
+func _think(enemy: Player, delta: float) -> void:
 	var to_enemy: Vector2 = _wrapped_delta(_player.global_position, enemy.global_position)
 	var distance: float = to_enemy.length()
 	var threat: Bullet = _find_threat()
+	var towards_enemy: Vector2 = to_enemy.normalized()
 
 	if threat != null and _dodge_timer == 0.0:
 		_dodge_sign = -_dodge_sign
@@ -94,18 +108,34 @@ func _think(enemy: Player) -> void:
 		_dodge_heading = Vector2.UP.rotated(threat.rotation).rotated(PI / 2.0 * _dodge_sign)
 
 	_thrusting = false
-	_heading = to_enemy.normalized()
+	_heading = towards_enemy
 	if _dodge_timer > 0.0:
 		_heading = _dodge_heading
 		_thrusting = true
 	else:
+		var strafe: Vector2 = towards_enemy.rotated(PI / 2.0 * _strafe_sign)
 		if distance > approach_range:
+			_heading = (towards_enemy + strafe * strafe_blend).normalized()
 			_thrusting = true
 		elif distance < retreat_range - retreat_hysteresis:
-			_heading = -_heading
+			_heading = (-towards_enemy + strafe * strafe_blend).normalized()
 			_thrusting = true
+		else:
+			_update_weave(delta)
+			if _weaving:
+				_heading = strafe
+				_thrusting = true
 		if distance <= max_fire_range:
 			_try_fire_at(enemy, to_enemy)
+
+
+func _update_weave(delta: float) -> void:
+	_phase_timer -= delta
+	if _phase_timer <= 0.0:
+		_weaving = not _weaving
+		_phase_timer = strafe_duration if _weaving else strafe_interval
+		if _weaving:
+			_strafe_sign = -_strafe_sign
 
 
 func _get_enemy() -> Player:
@@ -145,15 +175,18 @@ func _find_threat() -> Bullet:
 func _try_fire_at(enemy: Player, to_enemy: Vector2) -> void:
 	if _fire_lockout > 0.0:
 		return
-	_fire_lockout = _player.shoot_cooldown * randf_range(FIRE_JITTER_MIN, FIRE_JITTER_MAX)
+	var facing: Vector2 = Vector2.UP.rotated(_player.rotation)
 	var lead: float = lead_factor * randf_range(lead_accuracy, 1.0)
 	var aim_point: Vector2 = (
 		enemy.global_position + enemy.velocity * to_enemy.length() / bullet_speed * lead
 	)
 	var to_aim: Vector2 = _wrapped_delta(_player.global_position, aim_point).normalized()
-	var facing: Vector2 = Vector2.UP.rotated(_player.rotation)
+	var aim_angle: float = facing.angle_to(to_aim)
+	if absf(aim_angle) > aim_tolerance * COARSE_AIM_WINDOW:
+		return
+	_fire_lockout = _player.shoot_cooldown * randf_range(FIRE_JITTER_MIN, FIRE_JITTER_MAX)
 	var tolerance: float = aim_tolerance * randf_range(aim_error, 1.0)
-	if absf(facing.angle_to(to_aim)) <= tolerance and randf() <= accuracy:
+	if absf(aim_angle) <= tolerance and randf() <= accuracy:
 		_player.try_fire()
 
 

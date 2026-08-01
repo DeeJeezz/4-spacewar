@@ -23,12 +23,16 @@ func test_navigation_flow(framework: RefCounted) -> void:
 	await get_tree().process_frame
 	framework.check_true(main._current_scene is MainMenu, "back returns to the menu")
 
-	main._on_play_pressed()
+	main._on_multiplayer_pressed()
 	await get_tree().process_frame
 	framework.check_true(main._current_scene is GameScene, "game starts from the menu")
 	var game: GameScene = main._current_scene
 	framework.check_true(game.get_node_or_null("Player1") != null, "player 1 is present")
 	framework.check_true(game.get_node_or_null("Player2") != null, "player 2 is present")
+	framework.check_false(
+		game.get_node("Player2").is_ai,
+		"multiplayer starts with a human player 2",
+	)
 
 	main._on_game_over(1, 300)
 	await get_tree().process_frame
@@ -38,6 +42,20 @@ func test_navigation_flow(framework: RefCounted) -> void:
 		victory.get_node("%WinnerLabel").text,
 		"Победитель: Игрок 1",
 		"victory shows the winner",
+	)
+
+
+func test_vs_ai_starts_with_ai_player2(framework: RefCounted) -> void:
+	var main: Node = _make_main()
+	await get_tree().process_frame
+	framework.check_true(main._current_scene is MainMenu, "menu is shown on start")
+
+	main._on_vs_ai_pressed()
+	await get_tree().process_frame
+	framework.check_true(main._current_scene is GameScene, "game starts from the menu")
+	framework.check_true(
+		main._current_scene.get_node("Player2").is_ai,
+		"vs ai starts with an AI player 2",
 	)
 
 
